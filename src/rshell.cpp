@@ -103,7 +103,6 @@ void parse (char *cmd, char **argv) {
         token = strtok(NULL, " \t\r\n");
         argv[i] = token;
         ++i;
-        ++size;
 
         if (token != NULL) {
             if (strcmp(token, "#") == 0) {
