@@ -1,98 +1,90 @@
-Script started on Fri 23 Jan 2015 10:27:29 PM PST
+Script started on Fri 23 Jan 2015 11:07:48 PM PST
 ~
-ccali003@hammer $ ls
-[0m[01;34mcs10[0m/   [01;34mDesktop[0m/    main.cpp  notes.cpp  [01;32msentence_count2[0m*  [01;34mtrash[0m/
-[01;34mCS100[0m/  [01;34mDocuments[0m/  [01;34mMusic[0m/    [01;34mPictures[0m/  [01;34mTemplates[0m/        [01;34mVideos[0m/
-[01;34mcs14[0m/   [01;34mDownloads[0m/  [01;32mnotes[0m*    [01;34mPublic[0m/    testing.cpp       [01;34mWINDOWS[0m/
-[m~
-ccali003@hammer $ cd Documents/CS100/hw0[K0/rshell
+ccali003@hammer $ cd Documents/CS100/hw0/rshell
 ~/Documents/CS100/hw0/rshell
 ccali003@hammer $ make
 if [ ! -d bin ]; then mkdir bin; fi
 g++ -ansi -pedantic -Wall -Werror src/rshell.cpp -o bin/rshell
 ~/Documents/CS100/hw0/rshell
-ccali003@hammer $ bin/shell
-bash: bin/shell: No such file or directory
-~/Documents/CS100/hw0/rshell
-ccali003@hammer $ ./[K[Kls
-[0m[01;34mbin[0m/  LICENSE  Makefile  README.md  [01;34msrc[0m/  [01;34mtests[0m/
-[m~/Documents/CS100/hw0/rshell
-ccali003@hammer $ cd src
-~/Documents/CS100/hw0/rshell/src
-ccali003@hammer $ g++ rshell.cpp
-~/Documents/CS100/hw0/rshell/src
-ccali003@hammer $ ./a.out
-ccali003@hammer.cs.ucr.edu:~$ ls #   # TEST CASES BI EGIN                     TEST CASES BEGIN
+ccali003@hammer $ bin/rshell
+ccali003@hammer.cs.ucr.edu:~$ TEST      START TEST CASES
 there was an error in execvp: No such file or directory
 ccali003@hammer.cs.ucr.edu:~$ ls
-a.out  rshell.cpp
+LICENSE  Makefile  README.md  bin  src	tests
 ccali003@hammer.cs.ucr.edu:~$ ls -l
-total 20
--rwx------ 1 ccali003 classes 16012 Jan 23 22:25 a.out
--rw------- 1 ccali003 classes  3915 Jan 23 22:22 rshell.cpp
-ccali003@hammer.cs.ucr.edu:~$ ls -a -l
-total 28
-drwx------ 2 ccali003 classes  4096 Jan 23 22:25 .
-drwx------ 6 ccali003 classes  4096 Jan 23 22:23 ..
--rwx------ 1 ccali003 classes 16012 Jan 23 22:25 a.out
--rw------- 1 ccali003 classes  3915 Jan 23 22:22 rshell.cpp
-ccali003@hammer.cs.ucr.edu:~$ ls -a -l # This should           pwd
-total 28
-drwx------ 2 ccali003 classes  4096 Jan 23 22:25 .
-drwx------ 6 ccali003 classes  4096 Jan 23 22:23 ..
--rwx------ 1 ccali003 classes 16012 Jan 23 22:25 a.out
--rw------- 1 ccali003 classes  3915 Jan 23 22:22 rshell.cpp
-ccali003@hammer.cs.ucr.edu:~$ ls -a -l #pwd
-total 28
-drwx------ 2 ccali003 classes  4096 Jan 23 22:25 .
-drwx------ 6 ccali003 classes  4096 Jan 23 22:23 ..
--rwx------ 1 ccali003 classes 16012 Jan 23 22:25 a.out
--rw------- 1 ccali003 classes  3915 Jan 23 22:22 rshell.cpp
-ccali003@hammer.cs.ucr.edu:~$ ls                                                                      
-a.out  rshell.cpp
-ccali003@hammer.cs.ucr.edu:~$ ls                                                             #whole bunch of spaces
-a.out  rshell.cpp
-ccali003@hammer.cs.ucr.edu:~$ ls						#whole bunch of tabs
-a.out  rshell.cpp
-ccali003@hammer.cs.ucr.edu:~$ ls                                 					#tabs and spaces
-a.out  rshell.cpp
-ccali003@hammer.cs.ucr.edu:~$ ls; ;
-ls: cannot access ;: No such file or directory
-ccali003@hammer.cs.ucr.edu:~$ ls; #haven't accounted for connectors
-ls: cannot access ;: No such file or directory
-ccali003@hammer.cs.ucr.edu:~$ ls ; pwd #haven't accounted for connectors
-ls: cannot access ;: No such file or directory
-ls: cannot access pwd: No such file or directory
-ccali003@hammer.cs.ucr.edu:~$ ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+total 40
+-rw------- 1 ccali003 classes 18027 Jan 23 22:22 LICENSE
+-rw------- 1 ccali003 classes   216 Jan 23 22:22 Makefile
+-rw------- 1 ccali003 classes   365 Jan 23 22:22 README.md
+drwx------ 2 ccali003 classes  4096 Jan 23 23:04 bin
+drwx------ 2 ccali003 classes  4096 Jan 23 23:02 src
+drwx------ 2 ccali003 classes  4096 Jan 23 23:04 tests
+ccali003@hammer.cs.ucr.edu:~$ ls -l -a
+total 52
+drwx------ 6 ccali003 classes  4096 Jan 23 22:23 .
+drwx------ 3 ccali003 classes  4096 Jan 23 22:21 ..
+drwx------ 8 ccali003 classes  4096 Jan 23 22:49 .git
+-rw------- 1 ccali003 classes 18027 Jan 23 22:22 LICENSE
+-rw------- 1 ccali003 classes   216 Jan 23 22:22 Makefile
+-rw------- 1 ccali003 classes   365 Jan 23 22:22 README.md
+drwx------ 2 ccali003 classes  4096 Jan 23 23:04 bin
+drwx------ 2 ccali003 classes  4096 Jan 23 23:02 src
+drwx------ 2 ccali003 classes  4096 Jan 23 23:04 tests
+ccali003@hammer.cs.ucr.edu:~$ ls -l #pwd   pwd
+total 40
+-rw------- 1 ccali003 classes 18027 Jan 23 22:22 LICENSE
+-rw------- 1 ccali003 classes   216 Jan 23 22:22 Makefile
+-rw------- 1 ccali003 classes   365 Jan 23 22:22 README.md
+drwx------ 2 ccali003 classes  4096 Jan 23 23:04 bin
+drwx------ 2 ccali003 classes  4096 Jan 23 23:02 src
+drwx------ 2 ccali003 classes  4096 Jan 23 23:04 tests
+ccali003@hammer.cs.ucr.edu:~$ ls # pwd
+LICENSE  Makefile  README.md  bin  src	tests
+ccali003@hammer.cs.ucr.edu:~$ ls                                                                                                                                                                        -l  
+total 40
+-rw------- 1 ccali003 classes 18027 Jan 23 22:22 LICENSE
+-rw------- 1 ccali003 classes   216 Jan 23 22:22 Makefile
+-rw------- 1 ccali003 classes   365 Jan 23 22:22 README.md
+drwx------ 2 ccali003 classes  4096 Jan 23 23:04 bin
+drwx------ 2 ccali003 classes  4096 Jan 23 23:02 src
+drwx------ 2 ccali003 classes  4096 Jan 23 23:04 tests
+ccali003@hammer.cs.ucr.edu:~$ ls															                           									                           -a # This is with tabs and spaces
+.  ..  .git  LICENSE  Makefile	README.md  bin	src  tests
+ccali003@hammer.cs.ucr.edu:~$ lsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
 there was an error in execvp: File name too long
-ccali003@hammer.cs.ucr.edu:~$ ls;pwd&&      &&pwd #haven't accounted for connectors
-ls: cannot access &&: No such file or directory
-ls: cannot access pwd: No such file or directory
-ccali003@hammer.cs.ucr.edu:~$ ls||psd  wd #haven't accountef d for connectors
-ls: cannot access ||: No such file or directory
-ls: cannot access pwd: No such file or directory
-ccali003@hammer.cs.ucr.edu:~$ ls || pwd #haven't accounted for connectors
-ls: cannot access ||: No such file or directory
-ls: cannot access pwd: No such file or directory
-ccali003@hammer.cs.ucr.edu:~$ cd  pwd   ls																																												                                   																																                                                                                               													                                                                                                                             -a
-.  ..  a.out  rshell.cpp
-ccali003@hammer.cs.ucr.edu:~$ 
-ccali003@hammer.cs.ucr.edu:~$ 
-ccali003@hammer.cs.ucr.edu:~$ 
-ccali003@hammer.cs.ucr.edu:~$ 
-ccali003@hammer.cs.ucr.edu:~$ 
-ccali003@hammer.cs.ucr.edu:~$ 
-ccali003@hammer.cs.ucr.edu:~$ ;
-there was an error in execvp: No such file or directory
-ccali003@hammer.cs.ucr.edu:~$ ls;
+ccali003@hammer.cs.ucr.edu:~$ ls ; pwd #     #h Have not coded to account fo c  r connectors
 ls: cannot access ;: No such file or directory
-ccali003@hammer.cs.ucr.edu:~$ ls&&
+ls: cannot access pwd: No such file or directory
+ccali003@hammer.cs.ucr.edu:~$ ls;pwd
+ls: cannot access ;: No such file or directory
+ls: cannot access pwd: No such file or directory
+ccali003@hammer.cs.ucr.edu:~$ ls & pwd
+ls: cannot access &: No such file or directory
+ls: cannot access pwd: No such file or directory
+ccali003@hammer.cs.ucr.edu:~$ ls && pwd
 ls: cannot access &&: No such file or directory
-ccali003@hammer.cs.ucr.edu:~$ ls &&
+ls: cannot access pwd: No such file or directory
+ccali003@hammer.cs.ucr.edu:~$ ls || pwd
+ls: cannot access ||: No such file or directory
+ls: cannot access pwd: No such file or directory
+ccali003@hammer.cs.ucr.edu:~$ ls||pwd
+ls: cannot access ||: No such file or directory
+ls: cannot access pwd: No such file or directory
+ccali003@hammer.cs.ucr.edu:~$ ls&&pwd #Will need to fix this later
 ls: cannot access &&: No such file or directory
+ls: cannot access pwd: No such file or directory
+ccali003@hammer.cs.ucr.edu:~$ ls  ls                                                                                                                                                                                                                                                 ; pwd
+ls: cannot access ;: No such file or directory
+ls: cannot access pwd: No such file or directory
+ccali003@hammer.cs.ucr.edu:~$ ./a.    ls
+LICENSE  Makefile  README.md  bin  src	tests
+ccali003@hammer.cs.ucr.edu:~$ ./a.out
+there was an error in execvp: No such file or directory
+ccali003@hammer.cs.ucr.edu:~$ cd    src/a.out
 ccali003@hammer.cs.ucr.edu:~$ exit
-~/Documents/CS100/hw0/rshell/src
+ccali003@hammer.cs.ucr.edu:~$ exit
+~/Documents/CS100/hw0/rshell
 ccali003@hammer $ exit
 exit
 
-Script done on Fri 23 Jan 2015 10:34:21 PM PST
+Script done on Fri 23 Jan 2015 11:11:55 PM PST
