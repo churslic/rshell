@@ -28,6 +28,15 @@ void trans_string (string& command) {
     }
 
     for (string::iterator it = command.begin(); it != command.end(); ++it) {
+        if (*it == '#') {
+            it = command.insert(it, ' ');
+            ++it;
+            ++it;
+            it = command.insert(it, ' ');
+        }
+    }
+
+    for (string::iterator it = command.begin(); it != command.end(); ++it) {
         if (*it == '&' && *(it + 1) == '&') {
             it = command.insert(it, ' ');
             ++it;
@@ -112,7 +121,18 @@ void parse (char *cmd, char **argv) {
         }
     }
 }
+/*
+void connectors (char **argv) {
+    vector<char *> arguments;
 
+    int i = 0;
+    for( ; argv[i] != NULL; ++i) {
+        arguments.push_back(argv[i]);
+        if (argv[i]
+    }
+
+}
+*/
 
 int main(int argc, char **argv) {
     char *login = getlogin();
