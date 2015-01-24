@@ -90,6 +90,10 @@ bool execute (char **argv) {
     	}
 }
 
+/*
+void connectors (string con, char **argv) {
+
+}*/
 
 /**
  * parse function
@@ -106,6 +110,8 @@ void parse (char *cmd, char **argv) {
     	argv[0] = token;
 
     	int i = 1;
+	//string connector = "first";
+	//bool exec_result = true;
 
     	while (token != NULL) {
  		token = strtok(NULL, " \t\r\n");
@@ -114,24 +120,35 @@ void parse (char *cmd, char **argv) {
 
         	if (token != NULL) {
 			if (strcmp(token, "#") == 0) {
-                	argv[i-1] = NULL;
-                	break;
+                		argv[i-1] = NULL;
+                		break;
             		}
+			/* FIX ME
+			else if (strcmp(token, ";") == 0) {
+				argv[i-1] = NULL;
+				if (connector == "first") {
+					exec_result = execute(argv);
+					connector = ";";	
+				}
+				else if
+			}
+			else if (strcmp(token, "&&") == 0) {
+				argv[i-1] = NULL;
+				if (connector == "first") {
+					exec_result = execute(argv);
+					connector = "&&";
+				}
+			}
+			else if (strcmp(token, "||") == 0) {
+				argv[i-1] = NULL;
+				if (connector == "first") {
+					exec_result = execute(argv);
+					connector = "||";
+				}
+			}*/
         	}
     	}
 }
-/*
-void connectors (char **argv) {
-    vector<char *> arguments;
-
-    int i = 0;
-    for( ; argv[i] != NULL; ++i) {
-        arguments.push_back(argv[i]);
-        if (argv[i]
-    }
-
-}
-*/
 
 int main(int argc, char **argv) {
     	char *login = getlogin();
