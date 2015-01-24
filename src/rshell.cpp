@@ -115,7 +115,21 @@ void parse (char *cmd, char **argv) {
 
 
 int main(int argc, char **argv) {
-    cout << "$ ";
+    char *login = getlogin();
+    char hostname[30];
+    gethostname(hostname, 30);
+
+    string name;
+    for (int i = 0; login[i] != '\0'; ++i) {
+        name.push_back(login[i]);
+    }
+
+    string host;
+    for (int i = 0; hostname[i] != '\0'; ++i) {
+        host.push_back(hostname[i]);
+    }
+
+    cout << name << "@" << host << ":~$ ";
     string command;
     getline(cin, command);
 
@@ -127,7 +141,7 @@ int main(int argc, char **argv) {
         parse(cmd, argv);
         execute(argv);
 
-        cout << "$ ";
+        cout << name << "@" << host << ":~$ ";
         getline(cin, command);
     }
 
