@@ -14,5 +14,6 @@ the bin folder.
 2. bin/rshell
 
 *Bugs/Limitations/Issues*
-1. This project so far does not support the use of conditionals. Any form
-   of ; && or || will result in an error.
+1. This program does not exactly match regular bash commands. For example 
+   typing in "ls#pwd" into bash would not execute, but in this rshell program
+   it will ignore #pwd and execute ls.

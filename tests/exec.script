@@ -1,4 +1,4 @@
-Script started on Fri 23 Jan 2015 11:07:48 PM PST
+Script started on Thu 29 Jan 2015 10:37:09 PM PST
 ~
 ccali003@hammer $ cd Documents/CS100/hw0/rshell
 ~/Documents/CS100/hw0/rshell
@@ -7,84 +7,228 @@ if [ ! -d bin ]; then mkdir bin; fi
 g++ -ansi -pedantic -Wall -Werror src/rshell.cpp -o bin/rshell
 ~/Documents/CS100/hw0/rshell
 ccali003@hammer $ bin/rshell
-ccali003@hammer.cs.ucr.edu:~$ TEST      START TEST CASES
-there was an error in execvp: No such file or directory
 ccali003@hammer.cs.ucr.edu:~$ ls
-LICENSE  Makefile  README.md  bin  src	tests
-ccali003@hammer.cs.ucr.edu:~$ ls -l
-total 40
--rw------- 1 ccali003 classes 18027 Jan 23 22:22 LICENSE
--rw------- 1 ccali003 classes   216 Jan 23 22:22 Makefile
--rw------- 1 ccali003 classes   365 Jan 23 22:22 README.md
-drwx------ 2 ccali003 classes  4096 Jan 23 23:04 bin
-drwx------ 2 ccali003 classes  4096 Jan 23 23:02 src
-drwx------ 2 ccali003 classes  4096 Jan 23 23:04 tests
-ccali003@hammer.cs.ucr.edu:~$ ls -l -a
-total 52
-drwx------ 6 ccali003 classes  4096 Jan 23 22:23 .
-drwx------ 3 ccali003 classes  4096 Jan 23 22:21 ..
-drwx------ 8 ccali003 classes  4096 Jan 23 22:49 .git
--rw------- 1 ccali003 classes 18027 Jan 23 22:22 LICENSE
--rw------- 1 ccali003 classes   216 Jan 23 22:22 Makefile
--rw------- 1 ccali003 classes   365 Jan 23 22:22 README.md
-drwx------ 2 ccali003 classes  4096 Jan 23 23:04 bin
-drwx------ 2 ccali003 classes  4096 Jan 23 23:02 src
-drwx------ 2 ccali003 classes  4096 Jan 23 23:04 tests
-ccali003@hammer.cs.ucr.edu:~$ ls -l #pwd   pwd
-total 40
--rw------- 1 ccali003 classes 18027 Jan 23 22:22 LICENSE
--rw------- 1 ccali003 classes   216 Jan 23 22:22 Makefile
--rw------- 1 ccali003 classes   365 Jan 23 22:22 README.md
-drwx------ 2 ccali003 classes  4096 Jan 23 23:04 bin
-drwx------ 2 ccali003 classes  4096 Jan 23 23:02 src
-drwx------ 2 ccali003 classes  4096 Jan 23 23:04 tests
-ccali003@hammer.cs.ucr.edu:~$ ls # pwd
-LICENSE  Makefile  README.md  bin  src	tests
-ccali003@hammer.cs.ucr.edu:~$ ls                                                                                                                                                                        -l  
-total 40
--rw------- 1 ccali003 classes 18027 Jan 23 22:22 LICENSE
--rw------- 1 ccali003 classes   216 Jan 23 22:22 Makefile
--rw------- 1 ccali003 classes   365 Jan 23 22:22 README.md
-drwx------ 2 ccali003 classes  4096 Jan 23 23:04 bin
-drwx------ 2 ccali003 classes  4096 Jan 23 23:02 src
-drwx------ 2 ccali003 classes  4096 Jan 23 23:04 tests
-ccali003@hammer.cs.ucr.edu:~$ ls															                           									                           -a # This is with tabs and spaces
+bin  LICENSE  Makefile	README.md  src	tests
+ccali003@hammer.cs.ucr.edu:~$ ls #pwd
+bin  LICENSE  Makefile	README.md  src	tests
+ccali003@hammer.cs.ucr.edu:~$ ls                             #spaces
+bin  LICENSE  Makefile	README.md  src	tests
+ccali003@hammer.cs.ucr.edu:~$ ls  				#tabs
+bin  LICENSE  Makefile	README.md  src	tests
+ccali003@hammer.cs.ucr.edu:~$ ls           						             #spaces and tabs
+bin  LICENSE  Makefile	README.md  src	tests
+ccali003@hammer.cs.ucr.edu:~$                                                                                                                                                                   ls #spaces before command
+bin  LICENSE  Makefile	README.md  src	tests
+ccali003@hammer.cs.ucr.edu:~$ 				ls #tabs before command
+bin  LICENSE  Makefile	README.md  src	tests
+ccali003@hammer.cs.ucr.edu:~$                                                                    					                                                          ls #tabs and spaces before command
+bin  LICENSE  Makefile	README.md  src	tests
+ccali003@hammer.cs.ucr.edu:~$ ls                                                                                                                                                                     #pwd
+bin  LICENSE  Makefile	README.md  src	tests
+ccali003@hammer.cs.ucr.edu:~$ ls		# pwd (tabs             blah  
+There was an error in execvp: No such file or directory
+ccali003@hammer.cs.ucr.edu:~$ 
+ccali003@hammer.cs.ucr.edu:~$ 
+ccali003@hammer.cs.ucr.edu:~$ ls -a
 .  ..  .git  LICENSE  Makefile	README.md  bin	src  tests
-ccali003@hammer.cs.ucr.edu:~$ lsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
-there was an error in execvp: File name too long
-ccali003@hammer.cs.ucr.edu:~$ ls ; pwd #     #h Have not coded to account fo c  r connectors
-ls: cannot access ;: No such file or directory
-ls: cannot access pwd: No such file or directory
-ccali003@hammer.cs.ucr.edu:~$ ls;pwd
-ls: cannot access ;: No such file or directory
-ls: cannot access pwd: No such file or directory
-ccali003@hammer.cs.ucr.edu:~$ ls & pwd
-ls: cannot access &: No such file or directory
-ls: cannot access pwd: No such file or directory
-ccali003@hammer.cs.ucr.edu:~$ ls && pwd
-ls: cannot access &&: No such file or directory
-ls: cannot access pwd: No such file or directory
-ccali003@hammer.cs.ucr.edu:~$ ls || pwd
-ls: cannot access ||: No such file or directory
-ls: cannot access pwd: No such file or directory
-ccali003@hammer.cs.ucr.edu:~$ ls||pwd
-ls: cannot access ||: No such file or directory
-ls: cannot access pwd: No such file or directory
-ccali003@hammer.cs.ucr.edu:~$ ls&&pwd #Will need to fix this later
-ls: cannot access &&: No such file or directory
-ls: cannot access pwd: No such file or directory
-ccali003@hammer.cs.ucr.edu:~$ ls  ls                                                                                                                                                                                                                                                 ; pwd
-ls: cannot access ;: No such file or directory
-ls: cannot access pwd: No such file or directory
-ccali003@hammer.cs.ucr.edu:~$ ./a.    ls
+ccali003@hammer.cs.ucr.edu:~$ ls 0a    -a -l
+total 52
+drwx------ 6 ccali003 classes  4096 Jan 24 00:02 .
+drwx------ 3 ccali003 classes  4096 Jan 23 22:21 ..
+drwx------ 8 ccali003 classes  4096 Jan 29 22:31 .git
+-rw------- 1 ccali003 classes 18027 Jan 23 23:14 LICENSE
+-rw------- 1 ccali003 classes   216 Jan 23 23:14 Makefile
+-rw------- 1 ccali003 classes   437 Jan 23 23:19 README.md
+drwx------ 2 ccali003 classes  4096 Jan 29 22:34 bin
+drwx------ 2 ccali003 classes  4096 Jan 29 22:28 src
+drwx------ 2 ccali003 classes  4096 Jan 23 23:14 tests
+ccali003@hammer.cs.ucr.edu:~$ ls -al
+total 52
+drwx------ 6 ccali003 classes  4096 Jan 24 00:02 .
+drwx------ 3 ccali003 classes  4096 Jan 23 22:21 ..
+drwx------ 8 ccali003 classes  4096 Jan 29 22:31 .git
+-rw------- 1 ccali003 classes 18027 Jan 23 23:14 LICENSE
+-rw------- 1 ccali003 classes   216 Jan 23 23:14 Makefile
+-rw------- 1 ccali003 classes   437 Jan 23 23:19 README.md
+drwx------ 2 ccali003 classes  4096 Jan 29 22:34 bin
+drwx------ 2 ccali003 classes  4096 Jan 29 22:28 src
+drwx------ 2 ccali003 classes  4096 Jan 23 23:14 tests
+ccali003@hammer.cs.ucr.edu:~$ ls                -a
+.  ..  .git  LICENSE  Makefile	README.md  bin	src  tests
+ccali003@hammer.cs.ucr.edu:~$ ls                 -a -l
+total 52
+drwx------ 6 ccali003 classes  4096 Jan 24 00:02 .
+drwx------ 3 ccali003 classes  4096 Jan 23 22:21 ..
+drwx------ 8 ccali003 classes  4096 Jan 29 22:31 .git
+-rw------- 1 ccali003 classes 18027 Jan 23 23:14 LICENSE
+-rw------- 1 ccali003 classes   216 Jan 23 23:14 Makefile
+-rw------- 1 ccali003 classes   437 Jan 23 23:19 README.md
+drwx------ 2 ccali003 classes  4096 Jan 29 22:34 bin
+drwx------ 2 ccali003 classes  4096 Jan 29 22:28 src
+drwx------ 2 ccali003 classes  4096 Jan 23 23:14 tests
+ccali003@hammer.cs.ucr.edu:~$ ls blaaaaaaaaaaaaaaaah
+ls: cannot access blaaaaaaaaaaaaaaaah: No such file or directory
+ccali003@hammer.cs.ucr.edu:~$ blaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaah
+There was an error in execvp: File name too long
+ccali003@hammer.cs.ucr.edu:~$ ls ; pwd
 LICENSE  Makefile  README.md  bin  src	tests
-ccali003@hammer.cs.ucr.edu:~$ ./a.out
-there was an error in execvp: No such file or directory
-ccali003@hammer.cs.ucr.edu:~$ cd    src/a.out
-ccali003@hammer.cs.ucr.edu:~$ exit
+/class/classes/ccali003/Documents/CS100/hw0/rshell
+ccali003@hammer.cs.ucr.edu:~$ ls;pwd
+LICENSE  Makefile  README.md  bin  src	tests
+/class/classes/ccali003/Documents/CS100/hw0/rshell
+ccali003@hammer.cs.ucr.edu:~$ ls; pwd
+LICENSE  Makefile  README.md  bin  src	tests
+/class/classes/ccali003/Documents/CS100/hw0/rshell
+ccali003@hammer.cs.ucr.edu:~$ ls ;pwd
+LICENSE  Makefile  README.md  bin  src	tests
+/class/classes/ccali003/Documents/CS100/hw0/rshell
+ccali003@hammer.cs.ucr.edu:~$ blah ;pwd    pwd
+There was an error in execvp: No such file or directory
+/class/classes/ccali003/Documents/CS100/hw0/rshell
+ccali003@hammer.cs.ucr.edu:~$ blah;pwd
+There was an error in execvp: No such file or directory
+/class/classes/ccali003/Documents/CS100/hw0/rshell
+ccali003@hammer.cs.ucr.edu:~$ blah; pwd
+There was an error in execvp: No such file or directory
+/class/classes/ccali003/Documents/CS100/hw0/rshell
+ccali003@hammer.cs.ucr.edu:~$ blah ;pwd
+There was an error in execvp: No such file or directory
+/class/classes/ccali003/Documents/CS100/hw0/rshell
+ccali003@hammer.cs.ucr.edu:~$ blah ; blah
+There was an error in execvp: No such file or directory
+There was an error in execvp: No such file or directory
+ccali003@hammer.cs.ucr.edu:~$ blah; blah
+There was an error in execvp: No such file or directory
+There was an error in execvp: No such file or directory
+ccali003@hammer.cs.ucr.edu:~$ blah ;blah
+There was an error in execvp: No such file or directory
+There was an error in execvp: No such file or directory
+ccali003@hammer.cs.ucr.edu:~$ ls && pwd
+LICENSE  Makefile  README.md  bin  src	tests
+/class/classes/ccali003/Documents/CS100/hw0/rshell
+ccali003@hammer.cs.ucr.edu:~$ ls&&pwd
+LICENSE  Makefile  README.md  bin  src	tests
+/class/classes/ccali003/Documents/CS100/hw0/rshell
+ccali003@hammer.cs.ucr.edu:~$ ls&& pwd
+LICENSE  Makefile  README.md  bin  src	tests
+/class/classes/ccali003/Documents/CS100/hw0/rshell
+ccali003@hammer.cs.ucr.edu:~$ ls &&pwd
+LICENSE  Makefile  README.md  bin  src	tests
+/class/classes/ccali003/Documents/CS100/hw0/rshell
+ccali003@hammer.cs.ucr.edu:~$ blah && pwd
+There was an error in execvp: No such file or directory
+ccali003@hammer.cs.ucr.edu:~$ blah&&pwd
+There was an error in execvp: No such file or directory
+ccali003@hammer.cs.ucr.edu:~$ blah&& pwd
+There was an error in execvp: No such file or directory
+ccali003@hammer.cs.ucr.edu:~$ blah &&pwd
+There was an error in execvp: No such file or directory
+ccali003@hammer.cs.ucr.edu:~$ ls ||p  pwd
+LICENSE  Makefile  README.md  bin  src	tests
+ccali003@hammer.cs.ucr.edu:~$ ls||pwd
+LICENSE  Makefile  README.md  bin  src	tests
+ccali003@hammer.cs.ucr.edu:~$ ls|| pwd
+LICENSE  Makefile  README.md  bin  src	tests
+ccali003@hammer.cs.ucr.edu:~$ ls ||pwd
+LICENSE  Makefile  README.md  bin  src	tests
+ccali003@hammer.cs.ucr.edu:~$ blah || pwd
+There was an error in execvp: No such file or directory
+/class/classes/ccali003/Documents/CS100/hw0/rshell
+ccali003@hammer.cs.ucr.edu:~$ blah||pwd
+There was an error in execvp: No such file or directory
+/class/classes/ccali003/Documents/CS100/hw0/rshell
+ccali003@hammer.cs.ucr.edu:~$ blah|| pwd
+There was an error in execvp: No such file or directory
+/class/classes/ccali003/Documents/CS100/hw0/rshell
+ccali003@hammer.cs.ucr.edu:~$ blah ||pwd
+There was an error in execvp: No such file or directory
+/class/classes/ccali003/Documents/CS100/hw0/rshell
+ccali003@hammer.cs.ucr.edu:~$ ls; ls;        ; ls ; ls
+LICENSE  Makefile  README.md  bin  src	tests
+LICENSE  Makefile  README.md  bin  src	tests
+LICENSE  Makefile  README.md  bin  src	tests
+ccali003@hammer.cs.ucr.edu:~$ ls;ls;ls
+LICENSE  Makefile  README.md  bin  src	tests
+LICENSE  Makefile  README.md  bin  src	tests
+LICENSE  Makefile  README.md  bin  src	tests
+ccali003@hammer.cs.ucr.edu:~$ ls; ls; ls
+LICENSE  Makefile  README.md  bin  src	tests
+LICENSE  Makefile  README.md  bin  src	tests
+LICENSE  Makefile  README.md  bin  src	tests
+ccali003@hammer.cs.ucr.edu:~$ ls ; ls ; ls;  ;
+LICENSE  Makefile  README.md  bin  src	tests
+LICENSE  Makefile  README.md  bin  src	tests
+LICENSE  Makefile  README.md  bin  src	tests
+ccali003@hammer.cs.ucr.edu:~$ ls;   ; ls; blah
+LICENSE  Makefile  README.md  bin  src	tests
+LICENSE  Makefile  README.md  bin  src	tests
+There was an error in execvp: No such file or directory
+ccali003@hammer.cs.ucr.edu:~$ ls;ls     ls  ; blah  ; blah
+LICENSE  Makefile  README.md  bin  src	tests
+There was an error in execvp: No such file or directory
+There was an error in execvp: No such file or directory
+ccali003@hammer.cs.ucr.edu:~$ blah; blah; blah
+There was an error in execvp: No such file or directory
+There was an error in execvp: No such file or directory
+There was an error in execvp: No such file or directory
+ccali003@hammer.cs.ucr.edu:~$ ba lah; blah; ls
+There was an error in execvp: No such file or directory
+There was an error in execvp: No such file or directory
+LICENSE  Makefile  README.md  bin  src	tests
+ccali003@hammer.cs.ucr.edu:~$ ba lah  ; blah    ls; ls
+There was an error in execvp: No such file or directory
+LICENSE  Makefile  README.md  bin  src	tests
+LICENSE  Makefile  README.md  bin  src	tests
+ccali003@hammer.cs.ucr.edu:~$ blah  ; ls; blah
+There was an error in execvp: No such file or directory
+LICENSE  Makefile  README.md  bin  src	tests
+There was an error in execvp: No such file or directory
+ccali003@hammer.cs.ucr.edu:~$ bl ls; bl       ls; blah; ls
+LICENSE  Makefile  README.md  bin  src	tests
+There was an error in execvp: No such file or directory
+LICENSE  Makefile  README.md  bin  src	tests
+ccali003@hammer.cs.ucr.edu:~$ ls&&      ls  &&pwd&&ls
+LICENSE  Makefile  README.md  bin  src	tests
+/class/classes/ccali003/Documents/CS100/hw0/rshell
+LICENSE  Makefile  README.md  bin  src	tests
+ccali003@hammer.cs.ucr.edu:~$ ls && pwd && ls &&
+LICENSE  Makefile  README.md  bin  src	tests
+/class/classes/ccali003/Documents/CS100/hw0/rshell
+LICENSE  Makefile  README.md  bin  src	tests
+ccali003@hammer.cs.ucr.edu:~$ ls &&  pwd    pwd || ls
+LICENSE  Makefile  README.md  bin  src	tests
+/class/classes/ccali003/Documents/CS100/hw0/rshell
+ccali003@hammer.cs.ucr.edu:~$ ls || pwd && ls
+LICENSE  Makefile  README.md  bin  src	tests
+ccali003@hammer.cs.ucr.edu:~$ blah || pwd && ls
+There was an error in execvp: No such file or directory
+/class/classes/ccali003/Documents/CS100/hw0/rshell
+LICENSE  Makefile  README.md  bin  src	tests
+ccali003@hammer.cs.ucr.edu:~$ ls || pwd || ls
+LICENSE  Makefile  README.md  bin  src	tests
+LICENSE  Makefile  README.md  bin  src	tests
+ccali003@hammer.cs.ucr.edu:~$ ls; pwd && ls
+LICENSE  Makefile  README.md  bin  src	tests
+/class/classes/ccali003/Documents/CS100/hw0/rshell
+LICENSE  Makefile  README.md  bin  src	tests
+ccali003@hammer.cs.ucr.edu:~$ ls -a; pwd || ls
+.  ..  .git  LICENSE  Makefile	README.md  bin	src  tests
+/class/classes/ccali003/Documents/CS100/hw0/rshell
+ccali003@hammer.cs.ucr.edu:~$ ls -a -l;    && pwd || ls  
+total 52
+drwx------ 6 ccali003 classes  4096 Jan 24 00:02 .
+drwx------ 3 ccali003 classes  4096 Jan 23 22:21 ..
+drwx------ 8 ccali003 classes  4096 Jan 29 22:31 .git
+-rw------- 1 ccali003 classes 18027 Jan 23 23:14 LICENSE
+-rw------- 1 ccali003 classes   216 Jan 23 23:14 Makefile
+-rw------- 1 ccali003 classes   437 Jan 23 23:19 README.md
+drwx------ 2 ccali003 classes  4096 Jan 29 22:34 bin
+drwx------ 2 ccali003 classes  4096 Jan 29 22:28 src
+drwx------ 2 ccali003 classes  4096 Jan 23 23:14 tests
+/class/classes/ccali003/Documents/CS100/hw0/rshell
 ccali003@hammer.cs.ucr.edu:~$ exit
 ~/Documents/CS100/hw0/rshell
 ccali003@hammer $ exit
 exit
 
-Script done on Fri 23 Jan 2015 11:11:55 PM PST
+Script done on Thu 29 Jan 2015 10:51:56 PM PST
