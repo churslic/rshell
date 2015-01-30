@@ -6,7 +6,6 @@
 #include <sys/wait.h>
 #include <string.h>
 #include <string>
-#include <vector>
 using namespace std;
 
 /**
@@ -17,83 +16,131 @@ using namespace std;
  * @return: returns nothing
  * **/
 void trans_string (string& command) {
-	for (string::iterator it = command.begin(); it != command.end(); ++it) {
-        	if (*it == ';') {
-			it = command.insert(it, ' ');
-            		++it;
-            		++it;
-            		it = command.insert(it, ' ');
-        	}	
-    	}	
+     for (string::iterator it = command.begin(); it != command.end(); ++it) {
+          if (*it == ';') {
+	       it = command.insert(it, ' ');
+                    ++it;
+            	    ++it;
+            	    it = command.insert(it, ' ');
+          }	
+     }	
 
-	for (string::iterator it = command.begin(); it != command.end(); ++it) {
-        	if (*it == '#') {
-            		it = command.insert(it, ' ');
-            		++it;
-            		++it;
-            		it = command.insert(it, ' ');
-        	}
-    	}
+     for (string::iterator it = command.begin(); it != command.end(); ++it) {
+          if (*it == '#') {
+               it = command.insert(it, ' ');
+                    ++it;
+            	    ++it;
+            	    it = command.insert(it, ' ');
+          }
+     }
 
-    	for (string::iterator it = command.begin(); it != command.end(); ++it) {
-        	if (*it == '&' && *(it + 1) == '&') {
-            		it = command.insert(it, ' ');
-            		++it;
-            		++it;
-            		++it;
-            		it = command.insert(it, ' ');
-        	}
-    	}
+     for (string::iterator it = command.begin(); it != command.end(); ++it) {
+          if (*it == '&' && *(it + 1) == '&') {
+               it = command.insert(it, ' ');
+               ++it;
+               ++it;
+               ++it;
+               it = command.insert(it, ' ');
+          }
+     }
 
-    	for (string::iterator it = command.begin(); it != command.end(); ++it) {
-        	if (*it == '|' && *(it + 1) == '|') {
-            		it = command.insert(it, ' ');
-            		++it;
-            		++it;
-            		++it;
-            		it = command.insert(it, ' ');
-        	}
-    	}
+     for (string::iterator it = command.begin(); it != command.end(); ++it) {
+          if (*it == '|' && *(it + 1) == '|') {
+               it = command.insert(it, ' ');
+               ++it;
+               ++it;
+               ++it;
+               it = command.insert(it, ' ');
+           }
+     }
 }
 
 
 /**
  * execute function
- * @summary: Uses execvp to call commands.
+ * @summary: Uses execvp to call commands. It also uses a pipe to communicate
+ * between the child and the parent to see whether or not execvp failed.
  * @parameter: char **argv is command that wants to be used.
- * @return: returns nothing
+ * @return: returns a boolean indicating whether execvp failed or not.
  * **/
 bool execute (char **argv) {
-	bool exec_result = true;
+     char str[] = "false";
+     char readbuffer[6];
+	
+     //Creating a pipe. I want to communicate with parent whether or
+     //not execvp failed
+     int fd[2];
+     if (pipe(fd) == -1) perror("There was an error with pipe");
 
-    	int pid = fork();
-    	if (pid == -1) {
-        	perror("fork fail");
-        	exit(1);
-    	}
-    	else if (pid == 0) {
-        	int fail = 0;
-        	fail = execvp(argv[0], argv);
+     int pid = fork();
+     if (pid == -1) {
+          perror("fork fail");
+          exit(1);
+     }
 
-        	if(fail == -1) {
-            		perror("there was an error in execvp");
-        	}
+     else if (pid == 0) {
+          //Close the read end of the pipe
+          if (close(fd[0]) == -1) perror("There was an error with close");
+		
+	  //If execvp fails we'll write into the pipe
+          if(execvp(argv[0], argv) == -1) {
+	       write(fd[1], str, (strlen(str)+1));
+               perror("There was an error in execvp");
+          }
 
-        	exec_result = false;
-        	exit(1);
-    	}
-    	else {
-        	if(wait(0) == -1) {
-        		perror("wait() error");
-        	}
-        	return exec_result;
-    	}
+          exit(1);
+     }
+     else {
+          //Close the write end of the pipe
+	  if (close(fd[1]) == -1) perror("There was an error with close");
+		
+	  //Want to wait for the child process to finish
+	  if (wait(0) == -1) perror("wait() error");
+		
+	  //Now we can read in data from the child
+	  if (read(fd[0], readbuffer, sizeof(readbuffer)) == -1) {
+	       perror("There was an error with read");
+	  }
+
+	  //Check to see what readbuffer has stored in it
+	  if (strcmp(readbuffer, "false") == 0) return false;
+	  else return true;
+     }
 }
 
-/*
-void connectors (string con, char **argv) {
-
-}*/
+/**
+ * connectors function
+ * @summary: Takes care of conditionals and appropriately executes commands
+ * @parameters: string con is used to tell which connector came before.
+ * bool& result is used to keep track of whether the command executed.
+ * char **argv is the command line
+ * @return: returns nothing
+ * **/
+void connectors (string con, bool& result, char **argv) {
+     if (con == ";") {
+          result = execute(argv);
+     }
+     else if (con == "&&") {
+          if (result) {
+	       result = execute(argv);
+	  }
+	  else {
+	       result = false;
+	  }		
+     }
+     else if (con == "||") {
+	  if (!result) {
+	       result = execute(argv);
+	  }
+	  else {
+               result = false;
+	  }
+     }
+     //This means that there were no connectors
+     else if (con == "first") {
+          execute(argv);
+     }
+}
 
 /**
  * parse function
@@ -106,80 +153,96 @@ void connectors (string con, char **argv) {
  * @return: Does not return anything
  * **/
 void parse (char *cmd, char **argv) {
-    	char *token = strtok(cmd, " \t\r\n");
-    	argv[0] = token;
+     char *token = strtok(cmd, " \t\r\n");
+     argv[0] = token;
 
-    	int i = 1;
-	//string connector = "first";
-	//bool exec_result = true;
+     int i = 1;
+     string connector = "first";
+     bool exec_result = true;
 
-    	while (token != NULL) {
- 		token = strtok(NULL, " \t\r\n");
-        	argv[i] = token;
-        	++i;
+     while (token != NULL) {
+          token = strtok(NULL, " \t\r\n");
+          argv[i] = token;
+          ++i;
 
-        	if (token != NULL) {
-			if (strcmp(token, "#") == 0) {
-                		argv[i-1] = NULL;
-                		break;
-            		}
-			/* FIX ME
-			else if (strcmp(token, ";") == 0) {
-				argv[i-1] = NULL;
-				if (connector == "first") {
-					exec_result = execute(argv);
-					connector = ";";	
-				}
-				else if
-			}
-			else if (strcmp(token, "&&") == 0) {
-				argv[i-1] = NULL;
-				if (connector == "first") {
-					exec_result = execute(argv);
-					connector = "&&";
-				}
-			}
-			else if (strcmp(token, "||") == 0) {
-				argv[i-1] = NULL;
-				if (connector == "first") {
-					exec_result = execute(argv);
-					connector = "||";
-				}
-			}*/
-        	}
-    	}
+          if (token != NULL) {
+	       if (strcmp(token, "#") == 0) {
+                    argv[i-1] = NULL;
+                    break;
+               }
+	       else if (strcmp(token, ";") == 0) {
+	            argv[i-1] = NULL;
+		    if (connector == "first") {
+		         exec_result = execute(argv);
+		         connector = ";";	
+			 i = 0;	
+		    }
+		    else {
+		         connectors(connector, exec_result, argv);
+			 connector = ";";
+			 i = 0;
+		    } 
+               }
+	       else if (strcmp(token, "&&") == 0) {
+	            argv[i-1] = NULL;
+		    if (connector == "first") {
+		         exec_result = execute(argv);
+			 connector = "&&";
+			 i = 0;
+		    }
+		    else {
+		         connectors(connector, exec_result, argv);
+			 connector = "&&";
+			 i = 0;
+		    }
+               }
+	       else if (strcmp(token, "||") == 0) {
+	            argv[i-1] = NULL;
+		    if (connector == "first") {
+		         exec_result = execute(argv);
+			 connector = "||";
+		         i = 0;
+		    }
+		    else {
+		         connectors(connector, exec_result, argv);
+			 connector = "||";
+			 i = 0;
+		    }
+               }
+          }
+     }
+     connectors(connector, exec_result, argv);
 }
 
 int main(int argc, char **argv) {
-    	char *login = getlogin();
-    	char hostname[30];
-    	gethostname(hostname, 30);
+     char *login = getlogin();
+     char hostname[30];
+     gethostname(hostname, 30);
 
-    	string name;
-    	for (int i = 0; login[i] != '\0'; ++i) {
-        	name.push_back(login[i]);
-    	}
+     string name;
+     for (int i = 0; login[i] != '\0'; ++i) {
+          name.push_back(login[i]);
+     }
 
-    	string host;
-    	for (int i = 0; hostname[i] != '\0'; ++i) {
+     string host;
+     for (int i = 0; hostname[i] != '\0'; ++i) {
         	host.push_back(hostname[i]);
-    	}
+     }
 
-    	cout << name << "@" << host << ":~$ ";
-    	string command;
-    	getline(cin, command);
+     cout << name << "@" << host << ":~$ ";
+     string command;
+     getline(cin, command);
 
-    	while(command != "exit") {
-        	trans_string(command);
-        	char *cmd = new char[command.length() + 1];
-        	strcpy(cmd, command.c_str());
+     while(command != "exit") {
+          trans_string(command);
+          char *cmd = new char[command.length() + 1];
+          strcpy(cmd, command.c_str());
 
-        	parse(cmd, argv);
-        	execute(argv);
+          parse(cmd, argv);
 
-        	cout << name << "@" << host << ":~$ ";
-        	getline(cin, command);
-    	}
+          cout << name << "@" << host << ":~$ ";
+          getline(cin, command);
+     }
 
-    	return 0;
+     return 0;
 }
