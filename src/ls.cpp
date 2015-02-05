@@ -23,14 +23,19 @@ bool mycomp (const char *a, const char *b) {
 
     //Want to skip the hidden file mark in alphabetizing
     if(a[0] == '.') ++i;
-    if(b[0] == '.') ++i;
+    if(b[0] == '.') ++j;
 
     if(a[i] == b[j]) {
         while(a[i] == b[j] && a[i] != '\0' && b[j] != '\0') {
             temp_a += tolower(a[i]);
             temp_b += tolower(b[j]);
             ++i;
+            ++j;
         }
+    }
+    else {
+        temp_a += tolower(a[i]);
+        temp_b += tolower(b[j]);
     }
 
     return(temp_a < temp_b);
