@@ -4,6 +4,7 @@
 #include <dirent.h>
 #include <errno.h>
 #include <stdio.h>
+#include <ctype.h>
 
 #include <iostream>
 #include <string.h>
@@ -13,24 +14,26 @@
 
 using namespace std;
 
+bool mycomp (const char *a, const char *b) {
+    int temp_a = 0;
+    int temp_b = 0;
 
-void print_l (struct stat &s) {
-    if(s.st_mode & S_IFDIR) cout << 'd';
-    else if(s.st_mode & S_IFLNK) cout << 'l';
-    else cout << '-';
-}
+    int i = 0;
+    int j = 0;
 
-void ls_l (DIR *dirp) {
-//int stat(const char *path, struct stat *buf);
-    dirent *direntp;
-    struct stat s;
-    vector<char *> v;
+    //Want to skip the hidden file mark in alphabetizing
+    if(a[0] == '.') ++i;
+    if(b[0] == '.') ++i;
 
-    while((direntp = readdir(dirp))) {
-        if(stat(direntp->d_name, &s) == -1) perror("stat error");
-
+    if(a[i] == b[j]) {
+        while(a[i] == b[j] && a[i] != '\0' && b[j] != '\0') {
+            temp_a += tolower(a[i]);
+            temp_b += tolower(b[j]);
+            ++i;
+        }
     }
-    cout << endl;
+
+    return(temp_a < temp_b);
 }
 
 vector<const char *> create_vec_ls_a(DIR *dirp) {
@@ -52,9 +55,10 @@ vector<const char *> create_vec_ls_a(DIR *dirp) {
     }
 
     vector<const char*>::iterator it = v.begin()+2;
-    sort(it, v.end());
+    sort(it, v.end(), mycomp);
     return v;
 }
+
 
 void print_ls_a(DIR *dirp) {
     vector<const char*> v = create_vec_ls_a(dirp);
@@ -69,6 +73,7 @@ void print_ls_a(DIR *dirp) {
     if(x % 6 != 0) cout << endl;
 }
 
+
 vector<const char *> create_vec_ls(DIR *dirp) {
     dirent *direntp;
     vector<const char *> v;
@@ -81,9 +86,10 @@ vector<const char *> create_vec_ls(DIR *dirp) {
         }
     }
 
-    sort(v.begin(), v.end());
+    sort(v.begin(), v.end(), mycomp);
     return v;
 }
+
 
 void print_ls(DIR *dirp) {
     vector<const char *> v = create_vec_ls(dirp);
@@ -98,6 +104,32 @@ void print_ls(DIR *dirp) {
     if(x % 6 != 0) cout << endl;
 }
 
+
+void print_l (struct stat &s) {
+    if(s.st_mode & S_IFDIR) cout << 'd';
+    else cout << '-';
+}
+
+
+void ls_l (DIR *dirp) {
+    struct stat s;
+    vector<const char *> v = create_vec_ls(dirp);
+
+    for(unsigned int i = 0; i < v.size(); ++i) {
+        if(stat(v.at(i), &s) == -1) perror("stat error");
+        print_l(s);
+        printf("%s", v.at(i));
+        cout << endl;
+    }
+
+/*    while((direntp = readdir(dirp))) {
+        if(stat(direntp->d_name, &s) == -1) perror("stat error");
+    }
+*/
+    cout << endl;
+}
+
+
 int main(int argc, char** argv) {
     //For the case that the only command would be "bin/ls"
     if(argc == 1) {
@@ -106,6 +138,8 @@ int main(int argc, char** argv) {
         if(dirp == NULL) perror("opendir error");
 
         print_ls(dirp);
+        //ls_l(dirp);
+
 
         if(closedir(dirp) == -1) perror("closedir error");
     }
