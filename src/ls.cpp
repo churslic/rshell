@@ -46,6 +46,37 @@ bool mycomp (const char *a, const char *b) {
     return(temp_a < temp_b);
 }
 
+bool argscomp (const char* a, const char *b) {
+    int temp_a = 0;
+    int temp_b = 0;
+
+    int i = 0;
+    int j = 0;
+
+    if(a[0] == '-') temp_a = -1;
+    else if(a[0] == '.') ++i;
+
+    if(b[0] == '-') temp_b = -1;
+    else if(b[0] == '.') ++j;
+
+    if(temp_a != -1 || temp_b != -1) {
+        if(a[i] == b[j]) {
+            while(a[i] == b[j] && a[i] != '\0' && b[j] != '\0') {
+                temp_a += tolower(a[i]);
+                temp_b += tolower(b[j]);
+                ++i;
+                ++j;
+            }
+        }
+        else {
+            temp_a += tolower(a[i]);
+            temp_b += tolower(b[j]);
+        }
+    }
+
+    return(temp_a < temp_b);
+}
+
 vector<const char *> create_vec_ls_a(DIR *dirp) {
     dirent *direntp;
     vector<const char *> v;
@@ -169,29 +200,39 @@ void l_info (struct stat &s) {
     printf("%02i%c%02i ", result.tm_hour, ':', result.tm_min);
 }
 
-void disk_blocks(vector<const char *> &v) {
+void disk_blocks(vector<const char *> &v, const char *dirName) {
     struct stat s;
     int blocks = 0;
 
     for(unsigned int i = 0; i < v.size(); ++i) {
-        if(stat(v.at(i), &s) == -1) perror("stat error");
+        string temp = dirName;
+        temp.append("/");
+        temp.append(v.at(i));
+        const char *tempName = temp.c_str();
+
+        if(stat(tempName, &s) == -1) perror("stat error");
         blocks += s.st_blocks;
     }
     blocks = blocks / 2;
     cout << "total: " << blocks << endl;
 }
 
-void print_ls_l (DIR *dirp, bool a, bool R) {
+void print_ls_l (DIR *dirp, const char *dirName, bool a, bool R) {
     struct stat s;
 
     vector<const char *> v;
     if(a) v = create_vec_ls_a(dirp);
     else v = create_vec_ls(dirp);
 
-    disk_blocks(v);
+    disk_blocks(v, dirName);
 
     for(unsigned int i = 0; i < v.size(); ++i) {
-        if(stat(v.at(i), &s) == -1) perror("stat error");
+        string temp = dirName;
+        temp.append("/");
+        temp.append(v.at(i));
+        const char* tempName = temp.c_str();
+
+        if(stat(tempName, &s) == -1) perror("stat error");
         l_info(s);
         cout << v.at(i) << endl;
     }
@@ -234,15 +275,17 @@ void print_ls_R(DIR *dirp, const char *dirName) {
     return;
 }
 
-void print_flag_helper (DIR *dirp, bool a, bool l, bool R) {
+void print_flag_helper (DIR *dirp, const char* dirName,
+                        bool a, bool l, bool R) {
     if(a && !l && !R) print_ls_a(dirp);
-    else if(a && l && !R) print_ls_l(dirp, a, R);
+    else if(l && !R) print_ls_l(dirp, dirName, a, R);
 }
 
 int main(int argc, char** argv) {
     bool a = false;
     bool l = false;
     bool R = false;
+    bool flag_found = false;
 
     //For the case that the only command would be "bin/ls"
     if(argc == 1) {
@@ -254,74 +297,60 @@ int main(int argc, char** argv) {
 
         if(closedir(dirp) == -1) perror("closedir error");
     }
-    //For the case that there may be flags or commands typed
-    //in after "bin/ls".
+    //For the case that there are more arguments
     else {
-        //This if statement checks to see if the very first
-        //character of the first argument is a '-'. Then we know
-        //that this argument and possibly the next arguments
-        //are flags.
-        //BUG FIX: There may be a case where we pass in:
-        //  ls - a
-        //This should be treated as if '-' is a file or directory
-        //and 'a' is a file or directory
-        if(argv[1][0] == '-' && argv[1][1] != '\0') {
+        //Create vector, sorted to have flags in the front
+        vector<const char*> args;
+        for(int i = 1; i < argc; ++i) args.push_back(argv[i]);
+        sort(args.begin(), args.end(), argscomp);
 
-            //This for loop will continue to treat the next
-            //arguments as flags until there is no more '-'.
-            int i = 1;
-            for( ; argv[i][0] == '-' && argv[i] != NULL; ++i) {
-                if(strchr(argv[i], 'a') != NULL) a = true;
-                if(strchr(argv[i], 'l') != NULL) l = true;
-                if(strchr(argv[i], 'R') != NULL) R = true;
+        //Will go through vector up until there are no more flags
+        unsigned int i = 0;
+        for(; i < args.size(); ++i) {
+            if(args.at(i)[0] == '-') {
+                flag_found = true;
+                if(strchr(args.at(i), 'a') != NULL) a = true;
+                if(strchr(args.at(i), 'l') != NULL) l = true;
+                if(strchr(args.at(i), 'R') != NULL) R = true;
             }
+            else break;
+        }
 
-            //If a, l, and R evaluate to false, then we have an
-            //invalid flag. Normally, ls will print out:
-            //  ls: invalid option -- '(flag)'
-            //where (flag) is the very first invalid flag.
-            //So if we passed in ls -ez, it will print out:
-            //  ls: invalid option -- 'e'
-            //Passing in invalid flags also will negate anything
-            //that comes after it, so "ls -z src" will not work
-            if(!a && !l && !R) {
-                cout << "ls: invalid option -- \'"
-                     << argv[1][0] << "\'" << endl;
-            }
-            //If we go to this else statement, then we have flags.
-            //But what if we have some directory names afterwards?
-            //What if we have file names?
-            else {
-                if(argv[i] != NULL) {
-                    for( ; argv[i] != NULL; ++i) {
-                        const char *dirName = argv[i];
-                        DIR *dirp = opendir(dirName);
-                        if(dirp == NULL) perror("opendir error");
+        //If a flag was found, but no valid flag input
+        //This will not execute anything if there were no
+        //valid flags
+        if(!a && !l && !R && flag_found) {
+            cout << "ls: invalid option -- \'"
+                 << args.at(1)[0] << "\'" << endl;
+            return 0;
+        }
+        //If i < args.size() then there must be more commands
+        //The way the vector is sorted, the argument at i
+        //should be a file name or a directory.
+        if(i < args.size()) {
+            for(; i < args.size(); ++i) {
+                const char *dirName = args.at(i);
+                DIR *dirp = opendir(dirName);
+                if(dirp == NULL) perror("opendir error");
 
-                        print_flag_helper(dirp, a, l, R);
+                print_flag_helper(dirp, dirName, a, l, R);
 
-                        if(closedir(dirp) == -1) {
-                            perror("closedir error");
-                        }
-                    }
-                }
-                else {
-                    const char *dirName = ".";
-                    DIR *dirp = opendir(dirName);
-                    if(dirp == NULL) perror("opendir error");
-
-                    print_flag_helper(dirp, a, l, R);
-
-                    if(closedir(dirp) == -1) {
-                        perror("closedir error");
-                    }
+                if(closedir(dirp) == -1) {
+                    perror("closedir error");
                 }
             }
         }
-        //This else statement means that we must treat the next
-        //arguments as if they're a path for ls
+            //If not, then flags were the only things input
         else {
-            cout << "FIX ME" << endl;
+            const char *dirName = ".";
+            DIR *dirp = opendir(dirName);
+            if(dirp == NULL) perror("opendir error");
+
+            print_flag_helper(dirp, dirName, a, l, R);
+
+            if(closedir(dirp) == -1) {
+                perror("closedir error");
+            }
         }
     }
 
