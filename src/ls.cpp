@@ -50,18 +50,13 @@ bool mycomp(const char *a, const char *b)
 }
 
 
-int is_dir(const char *dirName, const char *parent = ".")
+int is_dir(const char *dirName)
 {
     struct stat s;
 
-    string temp = parent;
-    temp.append("/");
-    temp.append(dirName);
-    const char *tempName = temp.c_str();
-
     //Returning -1 means that the path
     //doesn't exit
-    if(stat(tempName, &s) == -1)
+    if(stat(dirName, &s) == -1)
     {
         perror(NULL);
         return -1;
@@ -130,7 +125,7 @@ void print_ls(DIR *dirp, bool a = false)
     int x = 1;
     for(unsigned int i = 0; i < v.size(); ++i)
     {
-        printf("%-14s", v.at(i));
+        printf("%-13s ", v.at(i));
         ++x;
         if(x % 6 == 0) cout << endl;
     }
@@ -192,7 +187,7 @@ void l_info(struct stat &s)
 
     cout << month(result.tm_mon) << ' ';
     printf(" %2i ", result.tm_mday);
-    printf("%02i%c%-2i ", result.tm_hour, ':', result.tm_min);
+    printf("%02i%c%02i ", result.tm_hour, ':', result.tm_min);
 }
 
 
@@ -239,6 +234,74 @@ void print_ls_l (DIR *dirp, const char *dirName, bool a, bool R)
     }
 }
 
+void print_ls_R(DIR *dirp, const char *dirName, bool a, bool l)
+{
+    //----------------Section 1----------------------
+    //This section prints out the directory
+    struct stat s;
+    vector<const char*> v;
+
+    if(a) v = create_vec_ls_a(dirp);
+    else v = create_vec_ls(dirp);
+
+    if(l)
+    {
+        printf("%s%c\n", dirName, ':');
+        disk_blocks(v, dirName);
+        unsigned int i = 0;
+        for(; i < v.size(); ++i)
+        {
+            string temp = dirName;
+            temp.append("/");
+            temp.append(v.at(i));
+            const char *tempName = temp.c_str();
+
+            if(stat(tempName, &s) == -1) perror("stat error");
+            l_info(s);
+            cout << v.at(i) << endl;
+        }
+        if(i != v.size()) cout << endl;
+    }
+    else
+    {
+        printf("%s%c\n", dirName, ':');
+        int x = 1;
+        unsigned int i = 0;
+        for(; i < v.size(); ++i)
+        {
+            printf("%-13s ", v.at(i));
+            ++x;
+            if(x % 6 == 0) cout << endl;
+        }
+        if(x % 6 != 0) cout << endl;
+    }
+    //-----------------------------------------------
+
+    //----------------Section 2----------------------
+    //Now this section will iterate through the vector
+    //and look for directories
+
+    for(unsigned int i = 0; i < v.size(); ++i)
+    {
+        //If it is a directory AND not the parent directory
+        string temp = dirName;
+        temp.append("/");
+        temp.append(v.at(i));
+        const char *tempName = temp.c_str();
+
+        if(is_dir(tempName) == 1 && strcmp(v.at(i), "..") != 0
+           && strcmp(v.at(i), ".") != 0)
+        {
+            DIR *tempDirp = opendir(tempName);
+            if(tempDirp == NULL) perror("opendir error");
+            cout << endl;
+            print_ls_R(tempDirp, tempName, a, l);
+
+            if(closedir(tempDirp) == -1) perror("closedir error");
+        }
+    }
+    return;
+}
 
 void print_flags(DIR *dirp, const char *dirName, bool a, bool l,
                  bool R)
@@ -246,6 +309,7 @@ void print_flags(DIR *dirp, const char *dirName, bool a, bool l,
     if(!a && !l && !R) print_ls(dirp);
     if(a && !l && !R) print_ls(dirp, a);
     if(l && !R) print_ls_l(dirp, dirName, a, R);
+    if(R) print_ls_R(dirp, dirName, a, l);
 }
 
 
@@ -269,29 +333,42 @@ int main(int argc, char **argv)
         {
             if(argv[i][0] == '-')
                 flags.push_back(argv[i]);
+            //So far, it seems that # must be first thing
+            //in order for it to be a comment
+            else if(argv[i][0] == '#') break;
         }
-
-        bool found_flag = false;
-        if(!flags.empty()) found_flag = true;
 
         bool a = false;
         bool l = false;
         bool R = false;
+        bool found_invalid = false;
+        char invalid;
 
         //Check to see if we have valid flags
         for(unsigned int i = 0; i < flags.size(); ++i)
         {
-            if(strchr(flags.at(i), 'a') != NULL) a = true;
-            if(strchr(flags.at(i), 'l') != NULL) l = true;
-            if(strchr(flags.at(i), 'R') != NULL) R = true;
+            for(unsigned int j = 0; flags.at(i)[j] != '\0'; ++j)
+            {
+                if(flags.at(i)[j] == 'a') a = true;
+                else if(flags.at(i)[j] == 'l') l = true;
+                else if(flags.at(i)[j] == 'R') R = true;
+                else if(flags.at(i)[j] != '-')
+                {
+                    invalid = flags.at(i)[j];
+                    found_invalid = true;
+                    break;
+                }
+            }
+
+            if(found_invalid) break;
         }
 
         //If we have no valid flags, then nothing gets
         //executed
-        if(!a && !l && !R && found_flag)
+        if(found_invalid)
         {
             cout << "ls: invalid option -- \'"
-                 << flags.at(1)[0] << "\'" << endl;
+                 << invalid << "\'" << endl;
             return 1;
         }
 
@@ -301,7 +378,7 @@ int main(int argc, char **argv)
         {
             if(argv[i][0] != '-')
                 names.push_back(argv[i]);
-
+            else if(argv[i][0] == '#') break;
         }
 
         bool found_names = false;
@@ -321,7 +398,9 @@ int main(int argc, char **argv)
                 {
                     DIR *dirp = opendir(dirName);
                     if(dirp == NULL) perror("");
+
                     print_flags(dirp, dirName, a, l, R);
+
                     if(closedir(dirp) == -1) perror("");
                 }
                 else if(check == 0)
@@ -334,7 +413,7 @@ int main(int argc, char **argv)
                         l_info(s);
                         printf("%s", dirName);
                     }
-                    else printf("%-14s", dirName);
+                    else printf("%-13s ", dirName);
                     cout << endl;
                 }
 
@@ -362,10 +441,22 @@ int main(int argc, char **argv)
                     unsigned int i = 0;
                     for(; i < files.size(); ++i)
                     {
-                        printf("%-14s", files.at(i));
-                        if((i+1) % 6 == 0) cout << endl;
+                        if(l)
+                        {
+                            struct stat s;
+                            if(stat(files.at(i), &s) == -1)
+                                perror("stat error");
+                            l_info(s);
+                            printf("%s\n", files.at(i));
+                        }
+                        else
+                        {
+                            printf("%-13s ", files.at(i));
+                            if((i+1) % 6 == 0) cout << endl;
+                        }
                     }
-                    if(i % 6 != 0) cout << endl;
+                    if(!l)
+                        if((i+1) % 6 != 0) cout << endl;
                     if(!dir.empty()) cout << endl;
                 }
 
