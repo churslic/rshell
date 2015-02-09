@@ -1,0 +1,693 @@
+Script started on Sun 08 Feb 2015 11:15:38 PM PST
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshell/testschelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell/tests$$ cd ..
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ bin/ ls
+bin           LICENSE       Makefile      README.md     src           
+tests         
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ bin/ ls -a
+.             ..            bin           .git          LICENSE       
+Makefile      README.md     src           tests         
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ bin/ ls               -a
+.             ..            bin           .git          LICENSE       
+Makefile      README.md     src           tests         
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ bin/ ls -l
+total 40
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 23:13 bin
+-rw-rw-r-- 1 chelsey chelsey  18027 Feb   7 21:33 LICENSE
+-rw-rw-r-- 1 chelsey chelsey    260 Feb   7 21:34 Makefile
+-rw-rw-r-- 1 chelsey chelsey   1245 Feb   8 22:27 README.md
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 23:13 src
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 23:14 tests
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ bin/ ls -R
+.:
+bin           LICENSE       Makefile      README.md     src           
+tests         
+
+./bin:
+ls            rshell        
+
+./src:
+ls.cpp        rshell.cpp    
+
+./tests:
+exec.script   ls.script     
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ bin/ ls -a -l
+total 52
+drwxrwxr-x 6 chelsey chelsey   4096 Feb   8 22:27 .
+drwxrwxr-x 3 chelsey chelsey   4096 Feb   7 21:33 ..
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 23:13 bin
+drwxrwxr-x 8 chelsey chelsey   4096 Feb   8 23:14 .git
+-rw-rw-r-- 1 chelsey chelsey  18027 Feb   7 21:33 LICENSE
+-rw-rw-r-- 1 chelsey chelsey    260 Feb   7 21:34 Makefile
+-rw-rw-r-- 1 chelsey chelsey   1245 Feb   8 22:27 README.md
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 23:13 src
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 23:14 tests
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ bin/ ls -al
+total 52
+drwxrwxr-x 6 chelsey chelsey   4096 Feb   8 22:27 .
+drwxrwxr-x 3 chelsey chelsey   4096 Feb   7 21:33 ..
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 23:13 bin
+drwxrwxr-x 8 chelsey chelsey   4096 Feb   8 23:14 .git
+-rw-rw-r-- 1 chelsey chelsey  18027 Feb   7 21:33 LICENSE
+-rw-rw-r-- 1 chelsey chelsey    260 Feb   7 21:34 Makefile
+-rw-rw-r-- 1 chelsey chelsey   1245 Feb   8 22:27 README.md
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 23:13 src
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 23:14 tests
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ bin/ ls -la
+total 52
+drwxrwxr-x 6 chelsey chelsey   4096 Feb   8 22:27 .
+drwxrwxr-x 3 chelsey chelsey   4096 Feb   7 21:33 ..
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 23:13 bin
+drwxrwxr-x 8 chelsey chelsey   4096 Feb   8 23:14 .git
+-rw-rw-r-- 1 chelsey chelsey  18027 Feb   7 21:33 LICENSE
+-rw-rw-r-- 1 chelsey chelsey    260 Feb   7 21:34 Makefile
+-rw-rw-r-- 1 chelsey chelsey   1245 Feb   8 22:27 README.md
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 23:13 src
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 23:14 tests
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ bin/ ls -a -l -R
+total 52
+drwxrwxr-x 6 chelsey chelsey   4096 Feb   8 22:27 .
+drwxrwxr-x 3 chelsey chelsey   4096 Feb   7 21:33 ..
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 23:13 bin
+drwxrwxr-x 8 chelsey chelsey   4096 Feb   8 23:14 .git
+-rw-rw-r-- 1 chelsey chelsey  18027 Feb   7 21:33 LICENSE
+-rw-rw-r-- 1 chelsey chelsey    260 Feb   7 21:34 Makefile
+-rw-rw-r-- 1 chelsey chelsey   1245 Feb   8 22:27 README.md
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 23:13 src
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 23:14 tests
+
+total 80
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 23:13 .
+drwxrwxr-x 6 chelsey chelsey   4096 Feb   8 22:27 ..
+-rwxrwxr-x 1 chelsey chelsey  51888 Feb   8 23:13 ls
+-rwxrwxr-x 1 chelsey chelsey  20379 Feb   8 22:28 rshell
+
+total 56
+drwxrwxr-x 8 chelsey chelsey   4096 Feb   8 23:14 .
+drwxrwxr-x 6 chelsey chelsey   4096 Feb   8 22:27 ..
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   7 21:33 branches
+-rw-rw-r-- 1 chelsey chelsey     58 Feb   8 22:25 COMMIT_EDITMSG
+-rw-rw-r-- 1 chelsey chelsey    316 Feb   7 21:34 config
+-rw-rw-r-- 1 chelsey chelsey     73 Feb   7 21:33 description
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   7 21:33 hooks
+-rw-rw-r-- 1 chelsey chelsey     19 Feb   7 21:34 HEAD
+-rw-rw-r-- 1 chelsey chelsey    488 Feb   8 22:24 index
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   7 21:33 info
+drwxrwxr-x 3 chelsey chelsey   4096 Feb   7 21:33 logs
+drwxrwxr-x 13 chelsey chelsey   4096 Feb   8 22:25 objects
+-rw-rw-r-- 1 chelsey chelsey    406 Feb   7 21:33 packed-refs
+drwxrwxr-x 5 chelsey chelsey   4096 Feb   7 21:33 refs
+
+total 8
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   7 21:33 .
+drwxrwxr-x 8 chelsey chelsey   4096 Feb   8 23:14 ..
+
+total 48
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   7 21:33 .
+drwxrwxr-x 8 chelsey chelsey   4096 Feb   8 23:14 ..
+-rwxrwxr-x 1 chelsey chelsey    452 Feb   7 21:33 applypatch-msg.sample
+-rwxrwxr-x 1 chelsey chelsey    896 Feb   7 21:33 commit-msg.sample
+-rwxrwxr-x 1 chelsey chelsey   4898 Feb   7 21:33 pre-rebase.sample
+-rwxrwxr-x 1 chelsey chelsey    189 Feb   7 21:33 post-update.sample
+-rwxrwxr-x 1 chelsey chelsey   1239 Feb   7 21:33 prepare-commit-msg.sample
+-rwxrwxr-x 1 chelsey chelsey   1642 Feb   7 21:33 pre-commit.sample
+-rwxrwxr-x 1 chelsey chelsey    398 Feb   7 21:33 pre-applypatch.sample
+-rwxrwxr-x 1 chelsey chelsey   1352 Feb   7 21:33 pre-push.sample
+-rwxrwxr-x 1 chelsey chelsey   3611 Feb   7 21:33 update.sample
+
+total 12
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   7 21:33 .
+drwxrwxr-x 8 chelsey chelsey   4096 Feb   8 23:14 ..
+-rw-rw-r-- 1 chelsey chelsey    240 Feb   7 21:33 exclude
+
+total 16
+drwxrwxr-x 3 chelsey chelsey   4096 Feb   7 21:33 .
+drwxrwxr-x 8 chelsey chelsey   4096 Feb   8 23:14 ..
+-rw-rw-r-- 1 chelsey chelsey    811 Feb   8 22:25 HEAD
+drwxrwxr-x 4 chelsey chelsey   4096 Feb   7 21:33 refs
+
+total 16
+drwxrwxr-x 4 chelsey chelsey   4096 Feb   7 21:33 .
+drwxrwxr-x 3 chelsey chelsey   4096 Feb   7 21:33 ..
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   7 21:34 heads
+drwxrwxr-x 3 chelsey chelsey   4096 Feb   7 21:33 remotes
+
+total 16
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   7 21:34 .
+drwxrwxr-x 4 chelsey chelsey   4096 Feb   7 21:33 ..
+-rw-rw-r-- 1 chelsey chelsey    636 Feb   8 22:25 ls
+-rw-rw-r-- 1 chelsey chelsey    184 Feb   7 21:33 master
+
+total 12
+drwxrwxr-x 3 chelsey chelsey   4096 Feb   7 21:33 .
+drwxrwxr-x 4 chelsey chelsey   4096 Feb   7 21:33 ..
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 18:57 origin
+
+total 16
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 18:57 .
+drwxrwxr-x 3 chelsey chelsey   4096 Feb   7 21:33 ..
+-rw-rw-r-- 1 chelsey chelsey    184 Feb   7 21:33 HEAD
+-rw-rw-r-- 1 chelsey chelsey    298 Feb   8 22:25 ls
+
+total 52
+drwxrwxr-x 13 chelsey chelsey   4096 Feb   8 22:25 .
+drwxrwxr-x 8 chelsey chelsey   4096 Feb   8 23:14 ..
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 18:56 64
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 22:25 74
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 22:24 83
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 22:25 91
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 18:56 a8
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 22:24 c7
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 18:56 de
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 18:56 ed
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 22:25 e2
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   7 21:33 info
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   7 21:33 pack
+
+total 12
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 18:56 .
+drwxrwxr-x 13 chelsey chelsey   4096 Feb   8 22:25 ..
+-r--r--r-- 1 chelsey chelsey    177 Feb   8 18:56 dbdf5cf08b9b9c34cf5c9da7cc5a87e169c3f9
+
+total 12
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 22:25 .
+drwxrwxr-x 13 chelsey chelsey   4096 Feb   8 22:25 ..
+-r--r--r-- 1 chelsey chelsey    200 Feb   8 22:25 7f72c08487313a5f462a172b25783e6c9dcb16
+
+total 12
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 22:24 .
+drwxrwxr-x 13 chelsey chelsey   4096 Feb   8 22:25 ..
+-r--r--r-- 1 chelsey chelsey    699 Feb   8 22:24 e8f07ebe02f07c2c9eac6be47754aaf5f5958d
+
+total 12
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 22:25 .
+drwxrwxr-x 13 chelsey chelsey   4096 Feb   8 22:25 ..
+-r--r--r-- 1 chelsey chelsey     81 Feb   8 22:25 60c06ef4732b7242e4c98ed2b0f0241f063f3e
+
+total 12
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 18:56 .
+drwxrwxr-x 13 chelsey chelsey   4096 Feb   8 22:25 ..
+-r--r--r-- 1 chelsey chelsey    233 Feb   8 18:56 8b2ada60d515e8087dd9148a571eb1ec4ce58d
+
+total 12
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 22:24 .
+drwxrwxr-x 13 chelsey chelsey   4096 Feb   8 22:25 ..
+-r--r--r-- 1 chelsey chelsey   3388 Feb   8 22:24 6f094887216264ccd929b1431ae37d25014007
+
+total 12
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 18:56 .
+drwxrwxr-x 13 chelsey chelsey   4096 Feb   8 22:25 ..
+-r--r--r-- 1 chelsey chelsey   2842 Feb   8 18:56 d472548f7491141269c4fb36c7593e75542256
+
+total 12
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 18:56 .
+drwxrwxr-x 13 chelsey chelsey   4096 Feb   8 22:25 ..
+-r--r--r-- 1 chelsey chelsey     82 Feb   8 18:56 cd1f62f68e94e658d6ef3cba82752566c1ad20
+
+total 12
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 22:25 .
+drwxrwxr-x 13 chelsey chelsey   4096 Feb   8 22:25 ..
+-r--r--r-- 1 chelsey chelsey    178 Feb   8 22:25 955181bd2ccaa52b9561e19f4f3e32ad722c39
+
+total 8
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   7 21:33 .
+drwxrwxr-x 13 chelsey chelsey   4096 Feb   8 22:25 ..
+
+total 40
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   7 21:33 .
+drwxrwxr-x 13 chelsey chelsey   4096 Feb   8 22:25 ..
+-r--r--r-- 1 chelsey chelsey  27121 Feb   7 21:33 pack-ceb0b3de018be6363506b3cf06fb3f59e004d754.pack
+-r--r--r-- 1 chelsey chelsey   3928 Feb   7 21:33 pack-ceb0b3de018be6363506b3cf06fb3f59e004d754.idx
+
+total 20
+drwxrwxr-x 5 chelsey chelsey   4096 Feb   7 21:33 .
+drwxrwxr-x 8 chelsey chelsey   4096 Feb   8 23:14 ..
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 22:25 heads
+drwxrwxr-x 3 chelsey chelsey   4096 Feb   7 21:33 remotes
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   7 21:33 tags
+
+total 16
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 22:25 .
+drwxrwxr-x 5 chelsey chelsey   4096 Feb   7 21:33 ..
+-rw-rw-r-- 1 chelsey chelsey     41 Feb   8 22:25 ls
+-rw-rw-r-- 1 chelsey chelsey     41 Feb   7 21:33 master
+
+total 12
+drwxrwxr-x 3 chelsey chelsey   4096 Feb   7 21:33 .
+drwxrwxr-x 5 chelsey chelsey   4096 Feb   7 21:33 ..
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 22:25 origin
+
+total 16
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 22:25 .
+drwxrwxr-x 3 chelsey chelsey   4096 Feb   7 21:33 ..
+-rw-rw-r-- 1 chelsey chelsey     32 Feb   7 21:33 HEAD
+-rw-rw-r-- 1 chelsey chelsey     41 Feb   8 22:25 ls
+
+total 8
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   7 21:33 .
+drwxrwxr-x 5 chelsey chelsey   4096 Feb   7 21:33 ..
+
+total 40
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 23:13 .
+drwxrwxr-x 6 chelsey chelsey   4096 Feb   8 22:27 ..
+-rw-r--r-- 1 chelsey chelsey   8192 Feb   8 21:11 .ls.cpp.swo
+-rw-rw-r-- 1 chelsey chelsey  12951 Feb   8 23:13 ls.cpp
+-rw-rw-r-- 1 chelsey chelsey   7168 Feb   7 21:33 rshell.cpp
+
+total 40
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 23:14 .
+drwxrwxr-x 6 chelsey chelsey   4096 Feb   8 22:27 ..
+-rw-rw-r-- 1 chelsey chelsey  13107 Feb   7 21:33 exec.script
+-rw-r--r-- 1 chelsey chelsey  16384 Feb   8 23:14 .ls.script.swp
+-rw-rw-r-- 1 chelsey chelsey      0 Feb   8 23:15 ls.script
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ bin/ ls -Ra -l
+total 52
+drwxrwxr-x 6 chelsey chelsey   4096 Feb   8 22:27 .
+drwxrwxr-x 3 chelsey chelsey   4096 Feb   7 21:33 ..
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 23:13 bin
+drwxrwxr-x 8 chelsey chelsey   4096 Feb   8 23:14 .git
+-rw-rw-r-- 1 chelsey chelsey  18027 Feb   7 21:33 LICENSE
+-rw-rw-r-- 1 chelsey chelsey    260 Feb   7 21:34 Makefile
+-rw-rw-r-- 1 chelsey chelsey   1245 Feb   8 22:27 README.md
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 23:13 src
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 23:14 tests
+
+total 80
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 23:13 .
+drwxrwxr-x 6 chelsey chelsey   4096 Feb   8 22:27 ..
+-rwxrwxr-x 1 chelsey chelsey  51888 Feb   8 23:13 ls
+-rwxrwxr-x 1 chelsey chelsey  20379 Feb   8 22:28 rshell
+
+total 56
+drwxrwxr-x 8 chelsey chelsey   4096 Feb   8 23:14 .
+drwxrwxr-x 6 chelsey chelsey   4096 Feb   8 22:27 ..
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   7 21:33 branches
+-rw-rw-r-- 1 chelsey chelsey     58 Feb   8 22:25 COMMIT_EDITMSG
+-rw-rw-r-- 1 chelsey chelsey    316 Feb   7 21:34 config
+-rw-rw-r-- 1 chelsey chelsey     73 Feb   7 21:33 description
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   7 21:33 hooks
+-rw-rw-r-- 1 chelsey chelsey     19 Feb   7 21:34 HEAD
+-rw-rw-r-- 1 chelsey chelsey    488 Feb   8 22:24 index
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   7 21:33 info
+drwxrwxr-x 3 chelsey chelsey   4096 Feb   7 21:33 logs
+drwxrwxr-x 13 chelsey chelsey   4096 Feb   8 22:25 objects
+-rw-rw-r-- 1 chelsey chelsey    406 Feb   7 21:33 packed-refs
+drwxrwxr-x 5 chelsey chelsey   4096 Feb   7 21:33 refs
+
+total 8
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   7 21:33 .
+drwxrwxr-x 8 chelsey chelsey   4096 Feb   8 23:14 ..
+
+total 48
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   7 21:33 .
+drwxrwxr-x 8 chelsey chelsey   4096 Feb   8 23:14 ..
+-rwxrwxr-x 1 chelsey chelsey    452 Feb   7 21:33 applypatch-msg.sample
+-rwxrwxr-x 1 chelsey chelsey    896 Feb   7 21:33 commit-msg.sample
+-rwxrwxr-x 1 chelsey chelsey   4898 Feb   7 21:33 pre-rebase.sample
+-rwxrwxr-x 1 chelsey chelsey    189 Feb   7 21:33 post-update.sample
+-rwxrwxr-x 1 chelsey chelsey   1239 Feb   7 21:33 prepare-commit-msg.sample
+-rwxrwxr-x 1 chelsey chelsey   1642 Feb   7 21:33 pre-commit.sample
+-rwxrwxr-x 1 chelsey chelsey    398 Feb   7 21:33 pre-applypatch.sample
+-rwxrwxr-x 1 chelsey chelsey   1352 Feb   7 21:33 pre-push.sample
+-rwxrwxr-x 1 chelsey chelsey   3611 Feb   7 21:33 update.sample
+
+total 12
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   7 21:33 .
+drwxrwxr-x 8 chelsey chelsey   4096 Feb   8 23:14 ..
+-rw-rw-r-- 1 chelsey chelsey    240 Feb   7 21:33 exclude
+
+total 16
+drwxrwxr-x 3 chelsey chelsey   4096 Feb   7 21:33 .
+drwxrwxr-x 8 chelsey chelsey   4096 Feb   8 23:14 ..
+-rw-rw-r-- 1 chelsey chelsey    811 Feb   8 22:25 HEAD
+drwxrwxr-x 4 chelsey chelsey   4096 Feb   7 21:33 refs
+
+total 16
+drwxrwxr-x 4 chelsey chelsey   4096 Feb   7 21:33 .
+drwxrwxr-x 3 chelsey chelsey   4096 Feb   7 21:33 ..
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   7 21:34 heads
+drwxrwxr-x 3 chelsey chelsey   4096 Feb   7 21:33 remotes
+
+total 16
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   7 21:34 .
+drwxrwxr-x 4 chelsey chelsey   4096 Feb   7 21:33 ..
+-rw-rw-r-- 1 chelsey chelsey    636 Feb   8 22:25 ls
+-rw-rw-r-- 1 chelsey chelsey    184 Feb   7 21:33 master
+
+total 12
+drwxrwxr-x 3 chelsey chelsey   4096 Feb   7 21:33 .
+drwxrwxr-x 4 chelsey chelsey   4096 Feb   7 21:33 ..
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 18:57 origin
+
+total 16
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 18:57 .
+drwxrwxr-x 3 chelsey chelsey   4096 Feb   7 21:33 ..
+-rw-rw-r-- 1 chelsey chelsey    184 Feb   7 21:33 HEAD
+-rw-rw-r-- 1 chelsey chelsey    298 Feb   8 22:25 ls
+
+total 52
+drwxrwxr-x 13 chelsey chelsey   4096 Feb   8 22:25 .
+drwxrwxr-x 8 chelsey chelsey   4096 Feb   8 23:14 ..
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 18:56 64
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 22:25 74
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 22:24 83
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 22:25 91
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 18:56 a8
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 22:24 c7
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 18:56 de
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 18:56 ed
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 22:25 e2
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   7 21:33 info
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   7 21:33 pack
+
+total 12
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 18:56 .
+drwxrwxr-x 13 chelsey chelsey   4096 Feb   8 22:25 ..
+-r--r--r-- 1 chelsey chelsey    177 Feb   8 18:56 dbdf5cf08b9b9c34cf5c9da7cc5a87e169c3f9
+
+total 12
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 22:25 .
+drwxrwxr-x 13 chelsey chelsey   4096 Feb   8 22:25 ..
+-r--r--r-- 1 chelsey chelsey    200 Feb   8 22:25 7f72c08487313a5f462a172b25783e6c9dcb16
+
+total 12
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 22:24 .
+drwxrwxr-x 13 chelsey chelsey   4096 Feb   8 22:25 ..
+-r--r--r-- 1 chelsey chelsey    699 Feb   8 22:24 e8f07ebe02f07c2c9eac6be47754aaf5f5958d
+
+total 12
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 22:25 .
+drwxrwxr-x 13 chelsey chelsey   4096 Feb   8 22:25 ..
+-r--r--r-- 1 chelsey chelsey     81 Feb   8 22:25 60c06ef4732b7242e4c98ed2b0f0241f063f3e
+
+total 12
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 18:56 .
+drwxrwxr-x 13 chelsey chelsey   4096 Feb   8 22:25 ..
+-r--r--r-- 1 chelsey chelsey    233 Feb   8 18:56 8b2ada60d515e8087dd9148a571eb1ec4ce58d
+
+total 12
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 22:24 .
+drwxrwxr-x 13 chelsey chelsey   4096 Feb   8 22:25 ..
+-r--r--r-- 1 chelsey chelsey   3388 Feb   8 22:24 6f094887216264ccd929b1431ae37d25014007
+
+total 12
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 18:56 .
+drwxrwxr-x 13 chelsey chelsey   4096 Feb   8 22:25 ..
+-r--r--r-- 1 chelsey chelsey   2842 Feb   8 18:56 d472548f7491141269c4fb36c7593e75542256
+
+total 12
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 18:56 .
+drwxrwxr-x 13 chelsey chelsey   4096 Feb   8 22:25 ..
+-r--r--r-- 1 chelsey chelsey     82 Feb   8 18:56 cd1f62f68e94e658d6ef3cba82752566c1ad20
+
+total 12
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 22:25 .
+drwxrwxr-x 13 chelsey chelsey   4096 Feb   8 22:25 ..
+-r--r--r-- 1 chelsey chelsey    178 Feb   8 22:25 955181bd2ccaa52b9561e19f4f3e32ad722c39
+
+total 8
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   7 21:33 .
+drwxrwxr-x 13 chelsey chelsey   4096 Feb   8 22:25 ..
+
+total 40
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   7 21:33 .
+drwxrwxr-x 13 chelsey chelsey   4096 Feb   8 22:25 ..
+-r--r--r-- 1 chelsey chelsey  27121 Feb   7 21:33 pack-ceb0b3de018be6363506b3cf06fb3f59e004d754.pack
+-r--r--r-- 1 chelsey chelsey   3928 Feb   7 21:33 pack-ceb0b3de018be6363506b3cf06fb3f59e004d754.idx
+
+total 20
+drwxrwxr-x 5 chelsey chelsey   4096 Feb   7 21:33 .
+drwxrwxr-x 8 chelsey chelsey   4096 Feb   8 23:14 ..
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 22:25 heads
+drwxrwxr-x 3 chelsey chelsey   4096 Feb   7 21:33 remotes
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   7 21:33 tags
+
+total 16
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 22:25 .
+drwxrwxr-x 5 chelsey chelsey   4096 Feb   7 21:33 ..
+-rw-rw-r-- 1 chelsey chelsey     41 Feb   8 22:25 ls
+-rw-rw-r-- 1 chelsey chelsey     41 Feb   7 21:33 master
+
+total 12
+drwxrwxr-x 3 chelsey chelsey   4096 Feb   7 21:33 .
+drwxrwxr-x 5 chelsey chelsey   4096 Feb   7 21:33 ..
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 22:25 origin
+
+total 16
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 22:25 .
+drwxrwxr-x 3 chelsey chelsey   4096 Feb   7 21:33 ..
+-rw-rw-r-- 1 chelsey chelsey     32 Feb   7 21:33 HEAD
+-rw-rw-r-- 1 chelsey chelsey     41 Feb   8 22:25 ls
+
+total 8
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   7 21:33 .
+drwxrwxr-x 5 chelsey chelsey   4096 Feb   7 21:33 ..
+
+total 40
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 23:13 .
+drwxrwxr-x 6 chelsey chelsey   4096 Feb   8 22:27 ..
+-rw-r--r-- 1 chelsey chelsey   8192 Feb   8 21:11 .ls.cpp.swo
+-rw-rw-r-- 1 chelsey chelsey  12951 Feb   8 23:13 ls.cpp
+-rw-rw-r-- 1 chelsey chelsey   7168 Feb   7 21:33 rshell.cpp
+
+total 56
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 23:14 .
+drwxrwxr-x 6 chelsey chelsey   4096 Feb   8 22:27 ..
+-rw-rw-r-- 1 chelsey chelsey  13107 Feb   7 21:33 exec.script
+-rw-r--r-- 1 chelsey chelsey  16384 Feb   8 23:14 .ls.script.swp
+-rw-rw-r-- 1 chelsey chelsey  16384 Feb   8 23:17 ls.script
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ bin/ ls -aR
+.:
+.             ..            bin           .git          LICENSE       
+Makefile      README.md     src           tests         
+
+./bin:
+.             ..            ls            rshell        
+
+./.git:
+.             ..            branches      COMMIT_EDITMSG config        
+description   hooks         HEAD          index         info          logs          
+objects       packed-refs   refs          
+
+./.git/branches:
+.             ..            
+
+./.git/hooks:
+.             ..            applypatch-msg.sample commit-msg.sample pre-rebase.sample 
+post-update.sample prepare-commit-msg.sample pre-commit.sample pre-applypatch.sample pre-push.sample update.sample 
+
+./.git/info:
+.             ..            exclude       
+
+./.git/logs:
+.             ..            HEAD          refs          
+
+./.git/logs/refs:
+.             ..            heads         remotes       
+
+./.git/logs/refs/heads:
+.             ..            ls            master        
+
+./.git/logs/refs/remotes:
+.             ..            origin        
+
+./.git/logs/refs/remotes/origin:
+.             ..            HEAD          ls            
+
+./.git/objects:
+.             ..            64            74            83            
+91            a8            c7            de            ed            e2            
+info          pack          
+
+./.git/objects/64:
+.             ..            dbdf5cf08b9b9c34cf5c9da7cc5a87e169c3f9 
+
+./.git/objects/74:
+.             ..            7f72c08487313a5f462a172b25783e6c9dcb16 
+
+./.git/objects/83:
+.             ..            e8f07ebe02f07c2c9eac6be47754aaf5f5958d 
+
+./.git/objects/91:
+.             ..            60c06ef4732b7242e4c98ed2b0f0241f063f3e 
+
+./.git/objects/a8:
+.             ..            8b2ada60d515e8087dd9148a571eb1ec4ce58d 
+
+./.git/objects/c7:
+.             ..            6f094887216264ccd929b1431ae37d25014007 
+
+./.git/objects/de:
+.             ..            d472548f7491141269c4fb36c7593e75542256 
+
+./.git/objects/ed:
+.             ..            cd1f62f68e94e658d6ef3cba82752566c1ad20 
+
+./.git/objects/e2:
+.             ..            955181bd2ccaa52b9561e19f4f3e32ad722c39 
+
+./.git/objects/info:
+.             ..            
+
+./.git/objects/pack:
+.             ..            pack-ceb0b3de018be6363506b3cf06fb3f59e004d754.pack pack-ceb0b3de018be6363506b3cf06fb3f59e004d754.idx 
+
+./.git/refs:
+.             ..            heads         remotes       tags          
+
+./.git/refs/heads:
+.             ..            ls            master        
+
+./.git/refs/remotes:
+.             ..            origin        
+
+./.git/refs/remotes/origin:
+.             ..            HEAD          ls            
+
+./.git/refs/tags:
+.             ..            
+
+./src:
+.             ..            .ls.cpp.swo   ls.cpp        rshell.cpp    
+
+./tests:
+.             ..            exec.script   .ls.script.swp ls.script     
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ #THI S PART OF THE PROGRAM HAS UNDEFINED OR RATHER VERY WACKY BEHAVIOR. FORMA TTING THE FILES/DIR IS DEFAULT TO 5 COLUMNS WITH A MINIMUM WIDTH OF 14 C O[KHARACTERS FOR EACH COLUMN. IF THE NAME IS LONGER THAN 14 CHARACTERS THEN  IT DOESN'T GET OUTPUTTED NICELY
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ bin/ ls -a -z #Testing for non existent flags
+ls: invalid option -- 'z'
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ ls[K[Kbin/ ls -az
+ls: invalid option -- 'z'
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ bin/ ls -a#z 
+ls: invalid option -- '#'
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ bin/ ls -i #This flag actually exists, but not in this program
+ls: invalid option -- 'i'
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ #NOW  TESTING FILES
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ bin/ ls Makefile
+Makefile      
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ bin/ ls blah
+No such file or directory
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ bin/ ls Makefile blah
+No such file or directory
+Makefile      
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ bin/ ls Makefile LICENSE
+LICENSE       Makefile      
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ bin/ ls Makefile src/ls.cpp
+Makefile      src/ls.cpp    
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ bin/ ls src/blah Makefile
+No such file or directory
+Makefile      
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ #NOW  TESTING DIRECTORIES
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ bin/ ls src
+ls.cpp        rshell.cpp    
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ bin/ ls src tests
+src:
+ls.cpp        rshell.cpp    
+
+tests:
+exec.script   ls.script     
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ bin/ ls .
+bin           LICENSE       Makefile      README.md     src           
+tests         
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ #NOW  TESTING FILES AND DIRECTORIES
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ bin/ ls Makefile src
+Makefile      
+
+src:
+ls.cpp        rshell.cpp    
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ bin/ ls src blah
+No such file or directory
+src:
+ls.cpp        rshell.cpp    
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ bin/ ls . Makefile src
+Makefile      
+
+.:
+bin           LICENSE       Makefile      README.md     src           
+tests         
+
+src:
+ls.cpp        rshell.cpp    
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ #NOW  TESTING FLAGS WITH DIRECTORIES
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ bin/ ls src -a
+.             ..            .ls.cpp.swo   ls.cpp        rshell.cpp    
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ bin/ ls src -l
+total 24
+-rw-rw-r-- 1 chelsey chelsey  12951 Feb   8 23:13 ls.cpp
+-rw-rw-r-- 1 chelsey chelsey   7168 Feb   7 21:33 rshell.cpp
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ bin/ ls src -al
+total 40
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 23:13 .
+drwxrwxr-x 6 chelsey chelsey   4096 Feb   8 22:27 ..
+-rw-r--r-- 1 chelsey chelsey   8192 Feb   8 21:11 .ls.cpp.swo
+-rw-rw-r-- 1 chelsey chelsey  12951 Feb   8 23:13 ls.cpp
+-rw-rw-r-- 1 chelsey chelsey   7168 Feb   7 21:33 rshell.cpp
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ bin/ ls src -R
+src:
+ls.cpp        rshell.cpp    
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ bin/ ls src -Rla
+total 40
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 23:13 .
+drwxrwxr-x 6 chelsey chelsey   4096 Feb   8 22:27 ..
+-rw-r--r-- 1 chelsey chelsey   8192 Feb   8 21:11 .ls.cpp.swo
+-rw-rw-r-- 1 chelsey chelsey  12951 Feb   8 23:13 ls.cpp
+-rw-rw-r-- 1 chelsey chelsey   7168 Feb   7 21:33 rshell.cpp
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ #NOW  TESTING FILES WITH FLAGS AND DIRECTORIES WITH FLAGS
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ bin/ ls -a Makefile -l src .
+-rw-rw-r-- 1 chelsey chelsey    260 Feb   7 21:34 Makefile
+
+.:
+total 52
+drwxrwxr-x 6 chelsey chelsey   4096 Feb   8 22:27 .
+drwxrwxr-x 3 chelsey chelsey   4096 Feb   7 21:33 ..
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 23:13 bin
+drwxrwxr-x 8 chelsey chelsey   4096 Feb   8 23:14 .git
+-rw-rw-r-- 1 chelsey chelsey  18027 Feb   7 21:33 LICENSE
+-rw-rw-r-- 1 chelsey chelsey    260 Feb   7 21:34 Makefile
+-rw-rw-r-- 1 chelsey chelsey   1245 Feb   8 22:27 README.md
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 23:13 src
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 23:14 tests
+
+src:
+total 40
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 23:13 .
+drwxrwxr-x 6 chelsey chelsey   4096 Feb   8 22:27 ..
+-rw-r--r-- 1 chelsey chelsey   8192 Feb   8 21:11 .ls.cpp.swo
+-rw-rw-r-- 1 chelsey chelsey  12951 Feb   8 23:13 ls.cpp
+-rw-rw-r-- 1 chelsey chelsey   7168 Feb   7 21:33 rshell.cpp
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ bin/ ls -R src Makefile -l -a
+-rw-rw-r-- 1 chelsey chelsey    260 Feb   7 21:34 Makefile
+
+src:
+total 40
+drwxrwxr-x 2 chelsey chelsey   4096 Feb   8 23:13 .
+drwxrwxr-x 6 chelsey chelsey   4096 Feb   8 22:27 ..
+-rw-r--r-- 1 chelsey chelsey   8192 Feb   8 21:11 .ls.cpp.swo
+-rw-rw-r-- 1 chelsey chelsey  12951 Feb   8 23:13 ls.cpp
+-rw-rw-r-- 1 chelsey chelsey   7168 Feb   7 21:33 rshell.cpp
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ bin/ ls -R .
+.:
+bin           LICENSE       Makefile      README.md     src           
+tests         
+
+./bin:
+ls            rshell        
+
+./src:
+ls.cpp        rshell.cpp    
+
+./tests:
+exec.script   ls.script     
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ bin/ ls blah -R Makefile -al
+No such file or directory
+-rw-rw-r-- 1 chelsey chelsey    260 Feb   7 21:34 Makefile
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ bin/ ls blah tests -R Makefile -l
+No such file or directory
+-rw-rw-r-- 1 chelsey chelsey    260 Feb   7 21:34 Makefile
+
+tests:
+total 48
+-rw-rw-r-- 1 chelsey chelsey  13107 Feb   7 21:33 exec.script
+-rw-rw-r-- 1 chelsey chelsey  32768 Feb   8 23:28 ls.script
+]0;chelsey@chelsey-Satellite-E45t-A: ~/Documents/CS100/hw/hw1.1/rshellchelsey@chelsey-Satellite-E45t-A:~/Documents/CS100/hw/hw1.1/rshell$ exit [A
+exit
+
+Script done on Sun 08 Feb 2015 11:28:49 PM PST

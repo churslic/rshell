@@ -125,7 +125,7 @@ void print_ls(DIR *dirp, bool a = false)
     int x = 1;
     for(unsigned int i = 0; i < v.size(); ++i)
     {
-        printf("%-13s ", v.at(i));
+        printf("%-14s", v.at(i));
         ++x;
         if(x % 6 == 0) cout << endl;
     }
@@ -246,7 +246,6 @@ void print_ls_R(DIR *dirp, const char *dirName, bool a, bool l)
 
     if(l)
     {
-        printf("%s%c\n", dirName, ':');
         disk_blocks(v, dirName);
         unsigned int i = 0;
         for(; i < v.size(); ++i)
