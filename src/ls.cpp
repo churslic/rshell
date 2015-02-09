@@ -16,81 +16,101 @@
 #include <algorithm>
 #include <vector>
 #include <string>
+#include <list>
 
 using namespace std;
 
-bool mycomp (const char *a, const char *b) {
+bool mycomp(const char *a, const char *b)
+{
     int temp_a = 0;
     int temp_b = 0;
 
     int i = 0;
     int j = 0;
-
-    //Want to skip the hidden file mark in alphabetizing
     if(a[0] == '.') ++i;
     if(b[0] == '.') ++j;
 
-    if(a[i] == b[j]) {
-        while(a[i] == b[j] && a[i] != '\0' && b[j] != '\0') {
+    if(tolower(a[i]) == tolower(b[j]))
+    {
+        while(tolower(a[i]) == tolower(b[j]) && a[i] != '\0'
+              && b[j] != '\0')
+        {
             temp_a += tolower(a[i]);
             temp_b += tolower(b[j]);
-            ++i;
-            ++j;
+            ++i; ++j;
         }
     }
-    else {
+    else
+    {
         temp_a += tolower(a[i]);
         temp_b += tolower(b[j]);
     }
 
-    return(temp_a < temp_b);
+    return (temp_a < temp_b);
 }
 
-bool argscomp (const char* a, const char *b) {
-    int temp_a = 0;
-    int temp_b = 0;
 
-    int i = 0;
-    int j = 0;
+int is_dir(const char *dirName, const char *parent = ".")
+{
+    struct stat s;
 
-    if(a[0] == '-') temp_a = -1;
-    else if(a[0] == '.') ++i;
+    string temp = parent;
+    temp.append("/");
+    temp.append(dirName);
+    const char *tempName = temp.c_str();
 
-    if(b[0] == '-') temp_b = -1;
-    else if(b[0] == '.') ++j;
+    //Returning -1 means that the path
+    //doesn't exit
+    if(stat(tempName, &s) == -1)
+    {
+        perror(NULL);
+        return -1;
+    }
 
-    if(temp_a != -1 || temp_b != -1) {
-        if(a[i] == b[j]) {
-            while(a[i] == b[j] && a[i] != '\0' && b[j] != '\0') {
-                temp_a += tolower(a[i]);
-                temp_b += tolower(b[j]);
-                ++i;
-                ++j;
-            }
-        }
-        else {
-            temp_a += tolower(a[i]);
-            temp_b += tolower(b[j]);
+    //Returning 1 means that it is a dir
+    //Returning 0 means that it is a file
+    if((s.st_mode&S_IFDIR) != 0) return 1;
+    else return 0;
+}
+
+
+vector<const char*> create_vec_ls(DIR *dirp)
+{
+    dirent *direntp;
+    vector<const char *> v;
+
+    while((direntp = readdir(dirp)))
+    {
+        if(direntp == NULL && errno != 0) perror("readdir error");
+
+        if(direntp->d_name[0] != '.')
+        {
+            v.push_back(direntp->d_name);
         }
     }
 
-    return(temp_a < temp_b);
+    sort(v.begin(), v.end(), mycomp);
+    return v;
 }
 
-vector<const char *> create_vec_ls_a(DIR *dirp) {
+
+vector<const char*> create_vec_ls_a(DIR *dirp)
+{
     dirent *direntp;
-    vector<const char *> v;
+    vector<const char*> v;
 
     const char *curr = ".";
     const char *parent = "..";
     v.push_back(curr);
     v.push_back(parent);
 
-    while((direntp = readdir(dirp))) {
+    while((direntp = readdir(dirp)))
+    {
         if(direntp == NULL && errno != 0) perror("readdir error");
 
         if(strcmp(direntp->d_name, ".") != 0 &&
-           strcmp(direntp->d_name, "..") != 0) {
+           strcmp(direntp->d_name, "..") != 0)
+        {
             v.push_back(direntp->d_name);
         }
     }
@@ -101,11 +121,15 @@ vector<const char *> create_vec_ls_a(DIR *dirp) {
 }
 
 
-void print_ls_a(DIR *dirp) {
-    vector<const char*> v = create_vec_ls_a(dirp);
+void print_ls(DIR *dirp, bool a = false)
+{
+    vector<const char*> v;
+    if(a) v = create_vec_ls_a(dirp);
+    else v = create_vec_ls(dirp);
 
     int x = 1;
-    for(unsigned int i = 0; i < v.size(); ++i) {
+    for(unsigned int i = 0; i < v.size(); ++i)
+    {
         printf("%-14s", v.at(i));
         ++x;
         if(x % 6 == 0) cout << endl;
@@ -115,37 +139,8 @@ void print_ls_a(DIR *dirp) {
 }
 
 
-vector<const char *> create_vec_ls(DIR *dirp) {
-    dirent *direntp;
-    vector<const char *> v;
-
-    while((direntp = readdir(dirp))) {
-        if(direntp == NULL && errno != 0) perror("readdir error");
-
-        if(direntp->d_name[0] != '.') {
-            v.push_back(direntp->d_name);
-        }
-    }
-
-    sort(v.begin(), v.end(), mycomp);
-    return v;
-}
-
-
-void print_ls(DIR *dirp) {
-    vector<const char *> v = create_vec_ls(dirp);
-
-    int x = 1;
-    for(unsigned int i = 0; i < v.size(); ++i) {
-        printf("%-14s", v.at(i));
-        ++x;
-        if(x % 6 == 0) cout << endl;
-    }
-
-    if(x % 6 != 0) cout << endl;
-}
-
-string month (int m) {
+string month(int m)
+{
     if(m == 0) return "Jan";
     else if(m == 1) return "Feb";
     else if(m == 2) return "Mar";
@@ -161,22 +156,23 @@ string month (int m) {
 }
 
 
-void l_info (struct stat &s) {
-    if((s.st_mode & S_IFDIR)) cout << 'd';
-    else if((s.st_mode & S_IFREG)) cout << '-';
-    else if((s.st_mode & S_IFLNK)) cout << 'l';
+void l_info(struct stat &s)
+{
+    if((s.st_mode&S_IFDIR) != 0) cout << 'd';
+    else if((s.st_mode&S_IFREG) != 0) cout << '-';
+    else if((s.st_mode&S_IFLNK) != 0) cout << 'l';
 
-    cout << ((s.st_mode & S_IRUSR) ? 'r' : '-');
-    cout << ((s.st_mode & S_IWUSR) ? 'w' : '-');
-    cout << ((s.st_mode & S_IXUSR) ? 'x' : '-');
+    cout << ((s.st_mode&S_IRUSR) ? 'r' : '-');
+    cout << ((s.st_mode&S_IWUSR) ? 'w' : '-');
+    cout << ((s.st_mode&S_IXUSR) ? 'x' : '-');
 
-    cout << ((s.st_mode & S_IRGRP) ? 'r' : '-');
-    cout << ((s.st_mode & S_IWGRP) ? 'w' : '-');
-    cout << ((s.st_mode & S_IXGRP) ? 'x' : '-');
+    cout << ((s.st_mode&S_IRGRP) ? 'r' : '-');
+    cout << ((s.st_mode&S_IWGRP) ? 'w' : '-');
+    cout << ((s.st_mode&S_IXGRP) ? 'x' : '-');
 
-    cout << ((s.st_mode & S_IROTH) ? 'r' : '-');
-    cout << ((s.st_mode & S_IWOTH) ? 'w' : '-');
-    cout << ((s.st_mode & S_IXOTH) ? 'x' : '-');
+    cout << ((s.st_mode&S_IROTH) ? 'r' : '-');
+    cout << ((s.st_mode&S_IWOTH) ? 'w' : '-');
+    cout << ((s.st_mode&S_IXOTH) ? 'x' : '-');
 
     cout << ' ' << s.st_nlink << ' ';
 
@@ -195,16 +191,18 @@ void l_info (struct stat &s) {
     localtime_r(&time, &result);
 
     cout << month(result.tm_mon) << ' ';
-
     printf(" %2i ", result.tm_mday);
-    printf("%02i%c%02i ", result.tm_hour, ':', result.tm_min);
+    printf("%02i%c%-2i ", result.tm_hour, ':', result.tm_min);
 }
 
-void disk_blocks(vector<const char *> &v, const char *dirName) {
+
+void disk_blocks(vector<const char*> &v, const char *dirName)
+{
     struct stat s;
     int blocks = 0;
 
-    for(unsigned int i = 0; i < v.size(); ++i) {
+    for(unsigned int i = 0; i < v.size(); ++i)
+    {
         string temp = dirName;
         temp.append("/");
         temp.append(v.at(i));
@@ -214,23 +212,26 @@ void disk_blocks(vector<const char *> &v, const char *dirName) {
         blocks += s.st_blocks;
     }
     blocks = blocks / 2;
-    cout << "total: " << blocks << endl;
+    cout << "total " << blocks << endl;
 }
 
-void print_ls_l (DIR *dirp, const char *dirName, bool a, bool R) {
-    struct stat s;
 
-    vector<const char *> v;
+void print_ls_l (DIR *dirp, const char *dirName, bool a, bool R)
+{
+    struct stat s;
+    vector<const char*> v;
+
     if(a) v = create_vec_ls_a(dirp);
     else v = create_vec_ls(dirp);
 
     disk_blocks(v, dirName);
 
-    for(unsigned int i = 0; i < v.size(); ++i) {
+    for(unsigned int i = 0; i < v.size(); ++i)
+    {
         string temp = dirName;
         temp.append("/");
         temp.append(v.at(i));
-        const char* tempName = temp.c_str();
+        const char *tempName = temp.c_str();
 
         if(stat(tempName, &s) == -1) perror("stat error");
         l_info(s);
@@ -238,57 +239,20 @@ void print_ls_l (DIR *dirp, const char *dirName, bool a, bool R) {
     }
 }
 
-void print_ls_R(DIR *dirp, const char *dirName) {
-    char *path = NULL;
-    path = getcwd(NULL, 0);
-    if(path == NULL) perror("realpath error");
 
-    printf("%s%c\n", path, ':');
-
-    vector<const char*> v = create_vec_ls(dirp);
-    int x = 1;
-    for(unsigned int i = 0; i < v.size(); ++i) {
-        printf("%-14s", v.at(i));
-        ++x;
-        if(x % 6 == 0) cout << endl;
-    }
-    if(x % 6 != 0) cout << endl;
-
-    struct stat s;
-    for(unsigned int i = 0; i < v.size(); ++i) {
-        if(stat(v.at(i), &s) == -1) perror("stat error");
-        if(s.st_mode & S_IFDIR) {
-            string temp = dirName;
-            temp.append("/");
-            temp.append(v.at(i));
-
-            const char *tempName = temp.c_str();
-
-            DIR *newdirp = opendir(tempName);
-            if(newdirp == NULL) perror("opendir error");
-
-            print_ls_R(newdirp, tempName);
-
-            if(closedir(newdirp) == -1) perror("closedir error");
-        }
-    }
-    return;
+void print_flags(DIR *dirp, const char *dirName, bool a, bool l,
+                 bool R)
+{
+    if(!a && !l && !R) print_ls(dirp);
+    if(a && !l && !R) print_ls(dirp, a);
+    if(l && !R) print_ls_l(dirp, dirName, a, R);
 }
 
-void print_flag_helper (DIR *dirp, const char* dirName,
-                        bool a, bool l, bool R) {
-    if(a && !l && !R) print_ls_a(dirp);
-    else if(l && !R) print_ls_l(dirp, dirName, a, R);
-}
 
-int main(int argc, char** argv) {
-    bool a = false;
-    bool l = false;
-    bool R = false;
-    bool flag_found = false;
-
-    //For the case that the only command would be "bin/ls"
-    if(argc == 1) {
+int main(int argc, char **argv)
+{
+    if(argc == 1)
+    {
         const char *dirName = ".";
         DIR *dirp = opendir(dirName);
         if(dirp == NULL) perror("opendir error");
@@ -297,62 +261,145 @@ int main(int argc, char** argv) {
 
         if(closedir(dirp) == -1) perror("closedir error");
     }
-    //For the case that there are more arguments
-    else {
-        //Create vector, sorted to have flags in the front
-        vector<const char*> args;
-        for(int i = 1; i < argc; ++i) args.push_back(argv[i]);
-        sort(args.begin(), args.end(), argscomp);
-
-        //Will go through vector up until there are no more flags
-        unsigned int i = 0;
-        for(; i < args.size(); ++i) {
-            if(args.at(i)[0] == '-') {
-                flag_found = true;
-                if(strchr(args.at(i), 'a') != NULL) a = true;
-                if(strchr(args.at(i), 'l') != NULL) l = true;
-                if(strchr(args.at(i), 'R') != NULL) R = true;
-            }
-            else break;
+    else
+    {
+        //First check to see if we have flags
+        vector<const char*> flags;
+        for(int i = 1; i < argc; ++i)
+        {
+            if(argv[i][0] == '-')
+                flags.push_back(argv[i]);
         }
 
-        //If a flag was found, but no valid flag input
-        //This will not execute anything if there were no
-        //valid flags
-        if(!a && !l && !R && flag_found) {
+        bool found_flag = false;
+        if(!flags.empty()) found_flag = true;
+
+        bool a = false;
+        bool l = false;
+        bool R = false;
+
+        //Check to see if we have valid flags
+        for(unsigned int i = 0; i < flags.size(); ++i)
+        {
+            if(strchr(flags.at(i), 'a') != NULL) a = true;
+            if(strchr(flags.at(i), 'l') != NULL) l = true;
+            if(strchr(flags.at(i), 'R') != NULL) R = true;
+        }
+
+        //If we have no valid flags, then nothing gets
+        //executed
+        if(!a && !l && !R && found_flag)
+        {
             cout << "ls: invalid option -- \'"
-                 << args.at(1)[0] << "\'" << endl;
-            return 0;
+                 << flags.at(1)[0] << "\'" << endl;
+            return 1;
         }
-        //If i < args.size() then there must be more commands
-        //The way the vector is sorted, the argument at i
-        //should be a file name or a directory.
-        if(i < args.size()) {
-            for(; i < args.size(); ++i) {
-                const char *dirName = args.at(i);
-                DIR *dirp = opendir(dirName);
-                if(dirp == NULL) perror("opendir error");
 
-                print_flag_helper(dirp, dirName, a, l, R);
+        //Now let's make a vector of the file/dir names
+        vector<const char*> names;
+        for(int i = 1; i < argc; ++i)
+        {
+            if(argv[i][0] != '-')
+                names.push_back(argv[i]);
 
-                if(closedir(dirp) == -1) {
-                    perror("closedir error");
+        }
+
+        bool found_names = false;
+        if(!names.empty()) found_names = true;
+
+        //If we found names, execute them
+        if(found_names)
+        {
+            //If there is only one argument then you
+            //don't have to print out the name of the dir
+            //(if it's a directory)
+            if(names.size() == 1)
+            {
+                const char *dirName = names.at(0);
+                int check = is_dir(dirName);
+                if(check == 1)
+                {
+                    DIR *dirp = opendir(dirName);
+                    if(dirp == NULL) perror("");
+                    print_flags(dirp, dirName, a, l, R);
+                    if(closedir(dirp) == -1) perror("");
                 }
+                else if(check == 0)
+                {
+                    if(l)
+                    {
+                        struct stat s;
+                        if(stat(dirName, &s) == -1)
+                            perror("stat error");
+                        l_info(s);
+                        printf("%s", dirName);
+                    }
+                    else printf("%-14s", dirName);
+                    cout << endl;
+                }
+
+            }
+            //If there's multiple files/dir then dir
+            //names have to be printed out
+            else
+            {
+                vector<const char*> files;
+                vector<const char*> dir;
+
+                for(unsigned int i = 0; i < names.size(); ++i)
+                {
+                    const char *dirName = names.at(i);
+                    int check = is_dir(dirName);
+                    if(check == 1)
+                        dir.push_back(names.at(i));
+                    else if(check == 0)
+                        files.push_back(names.at(i));
+                }
+
+                if(!files.empty())
+                {
+                    sort(files.begin(), files.end(), mycomp);
+                    unsigned int i = 0;
+                    for(; i < files.size(); ++i)
+                    {
+                        printf("%-14s", files.at(i));
+                        if((i+1) % 6 == 0) cout << endl;
+                    }
+                    if(i % 6 != 0) cout << endl;
+                    if(!dir.empty()) cout << endl;
+                }
+
+                if(!dir.empty())
+                {
+                    sort(dir.begin(), dir.end(), mycomp);
+                    for(unsigned int i = 0; i < dir.size(); ++i)
+                    {
+                        printf("%s%c\n", dir.at(i), ':');
+
+                        const char *dirName = dir.at(i);
+                        DIR *dirp = opendir(dirName);
+                        if(dirp == NULL) perror("");
+                        print_flags(dirp, dirName, a, l, R);
+                        if(closedir(dirp) == -1) perror("");
+
+                        if(i != dir.size()-1) cout << endl;
+                    }
+                }
+
             }
         }
-            //If not, then flags were the only things input
-        else {
+        //If we didn't find names, then execute the flags
+        //At this point there must have been valid flags
+        else
+        {
             const char *dirName = ".";
             DIR *dirp = opendir(dirName);
             if(dirp == NULL) perror("opendir error");
 
-            print_flag_helper(dirp, dirName, a, l, R);
+            print_flags(dirp, dirName, a, l, R);
 
-            if(closedir(dirp) == -1) {
-                perror("closedir error");
-            }
+            if(closedir(dirp) == -1) perror("closedir error");
         }
     }
-
     return 0;
 }
