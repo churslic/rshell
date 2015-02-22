@@ -13,11 +13,11 @@ be treated as if it were an invalid flag.
 
 rshell:
 
-1. The program will have a prompt.
+1. Open the program from the bin folder.
 
-2. Type in a linux command.
+2. Type in a command.
 
-3. To exit the program, type in "exit".
+3. Type in "exit" to exit the shell.
 
 ls:
 
@@ -33,7 +33,9 @@ ls:
    http://github.com/churslic/rshell.git
    Or download the zip.
 
-2. Type in "make" (Executables will be in the bin folder)
+2. Type in "make" (Executables will be in the bin folder).
+
+Alternatively, you may type make and then the executable you wish to use.
 
 *Bugs/Limitations/Issues*
 
