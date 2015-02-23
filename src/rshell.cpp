@@ -8,6 +8,7 @@
 #include <string>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <queue>
 using namespace std;
 
 /**
@@ -44,6 +45,10 @@ void connectors (string con, bool& result, char **argv);
 void out_redir(char **argv, const char *arg2, const char *str);
 
 void in_redir(char **argv, const char *arg2);
+
+void forking(int* pip1, int* pip2, queue<char**> &v);
+
+void piping(char **argv, queue<char**> &v);
 
 bool is_con(const char* s);
 
@@ -134,9 +139,6 @@ void trans_string (string& command) {
 
     for(it = command.begin(); it != command.end(); ++it) {
         if(*it == '|' && *(it+1) != '|' && *(it+1) != ' ') {
-            cout << "*it: " << *it << endl;
-            cout << "*(it+1): " << *(it+1) << endl;
-
             it = command.insert(it, ' ');
             it += 2;
             it = command.insert(it, ' ');
@@ -311,17 +313,90 @@ void in_redir(char **argv, const char *arg2) {
     }
 }
 
+void forking(int* pip1, int* pip2, queue<char**> &v) {
+    int pid;
+    if((pid = fork()) == -1) {
+        perror("fork err");
+        exit(1);
+    }
+    else if(pid == 0) { //Child process
+        if(pip1 != NULL) {
+            //That means we have something to read
+            if(dup2(pip1[0], 0) == -1)
+                perror("dup err");
+            if(close(pip1[0]) == -1)
+                perror("close err");
+            if(close(pip1[1]) == -1)
+                perror("close err");
+        }
+
+        if(pip2 != NULL) {
+            //that means we have something to write
+            if(dup2(pip2[1], 1) == -1)
+                perror("dup err");
+            if(close(pip2[0]) == -1)
+                perror("close err");
+            if(close(pip2[1]) == -1)
+                perror("close err");
+        }
+
+        if(execvp(v.front()[0], v.front()) == -1)
+            perror("");
+        exit(1);
+    }
+    else { //Parent process
+        if(wait(0) == -1)
+            perror("");
+    }
+
+    int savestdin;
+    if((savestdin = dup(0)) == -1)
+        perror("");
+    if(dup2(savestdin, 0) == -1)
+        perror("");
+
+}
+
+void piping(char **argv, queue<char**> &v) {
+    int pip1[2];
+    int pip2[2];
+
+    if(pipe(pip2) == -1)
+        perror("");
+
+    //There is no input pipe
+    forking(NULL, pip2, v);
+    v.pop();
+
+    pip1[0] = pip2[0]; //So lpipe[0] has the read end
+    pip1[1] = pip2[1]; //So lpipe[1] has the write end
+
+    for(unsigned int i = 1; i < v.size() - 1; ++i) {
+        cout << "do stuff" << endl;
+    }
+
+    forking(pip1, NULL, v);
+
+    if(close(pip1[0]) == -1)
+        perror("");
+    if(close(pip1[1]) == -1)
+        perror("");
+    if(close(pip2[0]) == -1)
+        perror("");
+    if(close(pip2[1]) == -1)
+        perror("");
+}
+
 bool is_con(const char* s) {
     if(strcmp(s, ";") == 0) return true;
     else if(strcmp(s, "&&") == 0) return true;
     else if(strcmp(s, "||") == 0) return true;
     else if(strcmp(s, "<") == 0) return true;
-    else if(strcmp(s, "<<") == 0) return true;
     else if(strcmp(s, ">") == 0) return true;
     else if(strcmp(s, ">>") == 0) return true;
-    else if(strcmp(s, "|") == 0) return true;
     else if(strcmp(s, "#") == 0) return true;
-    else return false;
+
+    return false;
 }
 
 void parse (char *cmd, char **argv) {
@@ -414,9 +489,35 @@ void parse (char *cmd, char **argv) {
                 i = 0;
             }
             else if(strcmp(token, "|") == 0) {
-                cout << "fix me, |" << endl;
+                argv[i-1] = NULL;
+
+                queue<char**> v;
+                v.push(argv);
+
+                char **arg2 = new char*;
+                int j = 0;
+
+                token = strtok(NULL, " \t\r\n");
+
+                while(token != NULL && !is_con(token)) {
+                    arg2[j] = token;
+                    ++j;
+                    if(strcmp(token, "|") == 0) {
+                        arg2[j] = NULL;
+                        v.push(arg2);
+                        j = 0;
+                    }
+                    token = strtok(NULL, " \t\r\n");
+                }
+                arg2[j] = NULL;
+                v.push(arg2);
+
+                piping(argv, v);
+                delete[] arg2;
+                i = 0;
             }
         }
     }
-    connectors(connector, exec_result, argv);
+    if(token != NULL)
+        connectors(connector, exec_result, argv);
 }
