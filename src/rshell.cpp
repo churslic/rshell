@@ -518,6 +518,6 @@ void parse (char *cmd, char **argv) {
             }
         }
     }
-    if(token != NULL)
+    if(connector == "first" || token != NULL)
         connectors(connector, exec_result, argv);
 }
