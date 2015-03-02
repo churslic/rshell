@@ -93,6 +93,7 @@ int main(int argc, char **argv) {
 
         parse(cmd, argv);
 
+        delete[] cmd;
         cout << name << "@" << host << ":~$ ";
         getline(cin, command);
     }
