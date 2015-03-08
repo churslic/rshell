@@ -3,97 +3,51 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
+#include <dirent.h>
 #include <sys/wait.h>
 #include <string.h>
 #include <string>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <queue>
+#include <errno.h>
+#include <vector>
+#include <boost/tokenizer.hpp>
+
+using namespace boost;
 using namespace std;
 
-/**
- * trans_string function
- * @summary: transforms the string so that there are spaces in
- * between the connectors
- * @param: the entire command line
- * @return: returns nothing
- * **/
-void trans_string (string& command);
+void parse(string command);
+void remove_comments(string &command);
+void trans_string(string &command);
 
-/**
- * execute function
- * @summary: Uses execvp to call commands. It also uses a pipe to
- * communicate between the child and the parent to see whether or
- * not execvp failed.
- * @parameter: char **argv is command that wants to be used.
- * @return: returns a boolean indicating whether execvp failed or
- * not.
- * **/
-bool execute (char **argv);
+typedef tokenizer< char_separator<char> > tok;
 
-/**
- * connectors function
- * @summary: Takes care of conditionals and appropriately executes
- * commands
- * @parameters: string con is used to tell which connector came
- * before, bool& result is used to keep track of whether the
- * command executed, char **argv is the command line
- * @return: returns nothing
- * **/
-void connectors (string con, bool& result, char **argv);
-
-void out_redir(char **argv, const char *arg2, const char *str);
-
-void in_redir(char **argv, const char *arg2);
-
-void forking(int* pip1, int* pip2, queue<char**> &v);
-
-void piping(char **argv, queue<char**> &v);
-
-bool is_con(const char* s);
-
-/**
- * parse function
- * @summary: Will take the command and store each string of
- * characters into an array. strtok ignores all whitespace.
- * Function will also break once # is found, since anything after
- * that can be ignored. The function will also check for connectors
- * and execute commands.
- * @param: char *cmd is the entire line that was input. char **argv
- * will be the array that stores each individual string of
- * characters.
- * @return: Does not return anything
- * **/
-void parse (char *cmd, char **argv);
-
-
-int main(int argc, char **argv) {
+int main() {
     char *login = getlogin();
     char hostname[30];
     gethostname(hostname, 30);
 
     string name;
-    for (int i = 0; login[i] != '\0'; ++i) {
+    for(int i = 0; login[i] != '\0'; ++i)
         name.push_back(login[i]);
-    }
 
     string host;
-    for (int i = 0; hostname[i] != '\0'; ++i) {
+    for(int i = 0; hostname[i] != '\0'; ++i)
         host.push_back(hostname[i]);
-    }
 
     cout << name << "@" << host << ":~$ ";
     string command;
     getline(cin, command);
 
     while(command != "exit") {
-        trans_string(command);
-        char *cmd = new char[command.length() + 1];
-        strcpy(cmd, command.c_str());
+        if(!command.empty()) {
+            remove_comments(command);
+            if(!command.empty()) {
+                trans_string(command);
+                parse(command);
+            }
+        }
 
-        parse(cmd, argv);
-
-        delete[] cmd;
         cout << name << "@" << host << ":~$ ";
         getline(cin, command);
     }
@@ -101,37 +55,709 @@ int main(int argc, char **argv) {
     return 0;
 }
 
-void trans_string (string& command) {
+bool is_con(string s) {
+    if(s == "&&") return true;
+    else if(s == "||") return true;
+    else if(s == ";") return true;
+    else if(s == "#") return true;
+    else if(s == "|") return true;
+    else if(s == ">") return true;
+    else if(s == ">>") return true;
+    else if(s == "<") return true;
+
+    return false;
+}
+
+bool is_special(string s) {
+    if(s == ">") return true;
+    else if(s == ">>") return true;
+    else if(s == "<") return true;
+    else if(s == "|") return true;
+
+    return false;
+}
+
+vector<string> parse_path(string pathName) {
+    char_separator<char> delim(":");
+    tok mytok(pathName, delim);
+    tok::iterator it = mytok.begin();
+
+    vector<string> v;
+    for(; it != mytok.end(); ++it)
+        v.push_back(*it);
+
+    return v;
+}
+
+vector<string> create_path() {
+    char *pathStr = getenv("PATH");
+    if(pathStr == NULL) perror("");
+    string pathName = pathStr;
+    return parse_path(pathName);
+}
+
+string find_path(string str) {
+    vector<string> exec_paths = create_path();
+    for(unsigned int i = 0; i < exec_paths.size(); ++i) {
+        DIR *dirp = opendir(exec_paths.at(i).c_str());
+        if(dirp == NULL) {
+            perror("");
+            exit(1);
+        }
+
+        dirent *direntp;
+
+        while((direntp = readdir(dirp))) {
+            if(direntp == NULL && errno != 0) {
+                perror("");
+                exit(1);
+            }
+            if(strcmp(direntp->d_name, str.c_str()) == 0) {
+                if(closedir(dirp) == -1) {
+                    perror("");
+                    exit(1);
+                }
+                return exec_paths.at(i);
+            }
+        }
+        if(closedir(dirp) == -1) {
+            perror("");
+            exit(1);
+        }
+    }
+    return "null";
+}
+
+vector<string> remove_spaces(string command) {
+    vector<string> v;
+
+    char_separator<char> delim(" ");
+    tok mytok(command, delim);
+    tok::iterator it = mytok.begin();
+
+    for(; it != mytok.end(); ++it) {
+        v.push_back(*it);
+    }
+
+    return v;
+}
+
+vector<char*> get_arguments(vector<string> &cmds) {
+    vector<char*> v;
+    for(unsigned int i = 0; i < cmds.size(); ++i) {
+        v.push_back(&(cmds.at(i)[0]));
+    }
+    v.push_back(NULL);
+    return v;
+}
+
+bool forking(vector<char*> &argv) {
+    int pid = fork();
+    if(pid == -1) {
+        perror("");
+        exit(1);
+    }
+    else if(pid == 0) {
+        if(execv(&argv[0][0], &argv[0]) == -1)
+            perror("");
+        exit(1);
+    }
+    else {
+        int status;
+        if(wait(&status) == -1) {
+            perror("");
+            exit(1);
+        }
+
+        if(status != 0) return false;
+        else return true;
+    }
+}
+
+bool execute(string args) {
+    vector<string> cmds = remove_spaces(args);
+
+    if(cmds.at(0) == "exit") exit(0);
+
+    string correct_path = find_path(cmds.at(0));
+
+    if(correct_path != "null") {
+        vector<char*> argv = get_arguments(cmds);
+        correct_path = correct_path + "/" + cmds.at(0);
+        argv.at(0) = (char*) correct_path.c_str();
+
+        return forking(argv);
+    }
+    else {
+        cerr << cmds.at(0) << ": command not found" << endl;
+        return false;
+    }
+}
+
+bool out_redir(vector<char*> &argv, const char* file,
+               const char* str)
+{
+    int pid = fork();
+    int fd;
+
+    if(pid == -1) {
+        perror("");
+        exit(1);
+    }
+    else if(pid == 0) {
+        if(strcmp(str, ">") == 0) {
+            fd = open(file, O_RDWR|O_CREAT|O_TRUNC,
+                      S_IRUSR|S_IWUSR);
+            if(fd == -1) {
+                perror("");
+                exit(1);
+            }
+        }
+        else {
+            fd = open(file, O_RDWR|O_CREAT|O_APPEND,
+                      S_IRUSR|S_IWUSR);
+            if(fd == -1) {
+                perror("");
+                exit(1);
+            }
+        }
+
+        if(dup2(fd, 1) == -1) {
+            perror("");
+            exit(1);
+        }
+
+        if(execv(&argv[0][0], &argv[0]) == -1) perror("");
+        exit(1);
+    }
+    else {
+        int status;
+        if(wait(&status) == -1) {
+            perror("");
+            exit(1);
+        }
+
+        if(status != 0) return false;
+        else return true;
+    }
+}
+
+bool execute_out(vector<string> &args, unsigned int i,
+                 const char* str)
+{
+    vector<string> cmds1 = remove_spaces(args.at(i));
+
+    if(cmds1.at(0) == "exit") exit(0);
+
+    vector<string> cmds2 = remove_spaces(args.at(i+1));
+
+    if(cmds2.size() > 1) {
+        cerr << "Too many arguments" << endl;
+        return false;
+    }
+
+    string correct_path = find_path(cmds1.at(0));
+
+    if(correct_path != "null") {
+        vector<char*> argv1 = get_arguments(cmds1);
+        const char* file = cmds2.at(0).c_str();
+
+        correct_path = correct_path + "/" + cmds1.at(0);
+        argv1.at(0) = (char*) correct_path.c_str();
+
+        return out_redir(argv1, file, str);
+    }
+    else {
+        cout << cmds1.at(0) << ": command not found" << endl;
+        return false;
+    }
+}
+
+bool in_redir(vector<char*> &argv, const char *file) {
+    int pid = fork();
+    int fd;
+
+    if(pid == -1) {
+        perror("");
+        exit(1);
+    }
+    else if(pid == 0) {
+        //Create file descriptor for the file
+        fd = open(file, O_RDONLY);
+        if(fd == -1) {
+            perror("");
+            exit(1);
+        }
+
+        //Close stdin, make fd the new stdin
+        if(dup2(fd, 0) == -1) {
+            perror("");
+            exit(1);
+        }
+
+        if(execv(&argv[0][0], &argv[0]) == -1) perror("");
+        exit(1);
+    }
+    else {
+        int status;
+        if(wait(&status) == -1) {
+            perror("");
+            exit(1);
+        }
+
+        if(status != 0) return false;
+        else return true;
+    }
+}
+
+bool execute_in(vector<string> &args, unsigned int i) {
+    vector<string> cmds1 = remove_spaces(args.at(i));
+
+    if(cmds1.at(0) == "exit") exit(0);
+
+    vector<string> cmds2 = remove_spaces(args.at(i+1));
+
+    if(cmds2.size() > 1) {
+        cerr << "Too many arguments" << endl;
+        return false;
+    }
+
+    struct stat s;
+    if(stat(cmds2.at(0).c_str(), &s) == -1) {
+        perror("");
+        exit(1);
+    }
+
+    if(s.st_mode&S_IFREG) {
+        string correct_path = find_path(cmds1.at(0));
+
+        if(correct_path != "null") {
+            vector<char*> argv1 = get_arguments(cmds1);
+            const char* file = cmds2.at(0).c_str();
+
+            correct_path = correct_path + "/" + cmds1.at(0);
+            argv1.at(0) = (char*) correct_path.c_str();
+
+            return in_redir(argv1, file);
+        }
+        else {
+            cerr << cmds1.at(0) << ": command not found" << endl;
+            return false;
+        }
+    }
+    else {
+        cerr << cmds2.at(0) << ": Is not a file" << endl;
+        return false;
+    }
+
+}
+
+bool valid_pipes(vector<string> &args) {
+    for(unsigned int i = 0; i < args.size(); ++i) {
+        vector<string> cmds = remove_spaces(args.at(i));
+        string correct_path = find_path(cmds.at(0));
+
+        if(correct_path == "null") {
+            cerr << cmds.at(0) << ": command not found" << endl;
+            return false;
+        }
+    }
+    return true;
+}
+
+bool fork_pipe(int* in_pipe, int* out_pipe, vector<char*> &argv) {
+    int pid = fork();
+    if(pid == -1) {
+        perror("");
+        exit(1);
+    }
+    else if(pid == 0) {
+        //This means we have something to read
+        if(in_pipe != NULL) {
+            if(dup2(in_pipe[0], 0) == -1)
+                perror("dup err");
+            if(close(in_pipe[1]) == -1)
+                perror("close err");
+            if(close(in_pipe[0]) == -1)
+                perror("close err");
+        }
+
+        //This means we want to write something
+        if(out_pipe != NULL) {
+            if(dup2(out_pipe[1], 1) == -1)
+                perror("dup err");
+            if(close(out_pipe[0]) == -1)
+                perror("close err");
+            if(close(out_pipe[1]) == -1)
+                perror("close err");
+        }
+
+        if(execv(&argv[0][0], &argv[0]) == -1) perror("");
+        exit(1);
+    }
+    else {
+        if(in_pipe != NULL) {
+            if(close(in_pipe[0]) == -1)
+                perror("close err");
+            if(close(in_pipe[1]) == -1)
+                perror("close err");
+        }
+
+        int status;
+        if(wait(&status) == -1) {
+            perror("");
+            exit(1);
+        }
+
+        if(status != 0) return false;
+        else return true;
+    }
+}
+
+bool execute_pipe(vector<string> &args, unsigned int &i) {
+    vector<string> cmds1 = remove_spaces(args.at(i));
+
+    if(cmds1.at(0) == "exit") exit(0);
+
+    //If there is a nonexistent command anywhere,
+    //pipe will not happen
+    if(!valid_pipes(args)) return false;
+
+    bool process;
+    //Now let's execute the first command
+    string correct_path = find_path(cmds1.at(0));
+
+    int in_pipe[2];
+    int out_pipe[2];
+
+    if(correct_path != "null") {
+        vector<char*> argv = get_arguments(cmds1);
+        correct_path = correct_path + "/" + cmds1.at(0);
+        argv.at(0) = (char*) correct_path.c_str();
+
+        if(pipe(out_pipe) == -1) {
+            perror("");
+            exit(1);
+        }
+
+        //First execution, doesn't have an incoming pipe
+        process = fork_pipe(NULL, out_pipe, argv);
+        ++i;
+
+        //Now out_pipe should have stuff in out_pipe[0]
+        in_pipe[0] = out_pipe[0];
+        in_pipe[1] = out_pipe[1];
+    }
+    else {
+        cerr << cmds1.at(0) << ": command not found" << endl;
+        return false;
+    }
+
+    vector<string> cmdlast = remove_spaces(args.at(i));
+    correct_path = find_path(cmdlast.at(0));
+
+    if(correct_path != "null") {
+        vector<char*> argv = get_arguments(cmdlast);
+        correct_path = correct_path + "/" + cmdlast.at(0);
+        argv.at(0) = (char*) correct_path.c_str();
+
+        process = fork_pipe(in_pipe, NULL, argv);
+    }
+    else {
+        cerr << cmdlast.at(0) << ": command not found" << endl;
+        return false;
+    }
+    return process;
+}
+
+/*bool execute_mult(vector<string> &args, unsigned int &i,
+                  unsigned int n = 2)
+{
+    vector<string> cmds1 = remove_spaces(args.at(i));
+
+    if(cmds1.at(0) == "exit") exit(0);
+
+    //If there is a nonexistent command anywhere,
+    //pipe will not happen
+    if(!valid_pipes(args)) return false;
+
+    bool process;
+    //Now let's execute the first command
+    vector<string> exec_paths = create_path();
+    string correct_path = find_path(exec_paths, cmds1.at(0));
+
+    int in_pipe[2];
+    int out_pipe[2];
+
+    if(correct_path != "null") {
+        vector<char*> argv = get_arguments(cmds1);
+        correct_path = correct_path + "/" + cmds1.at(0);
+        argv.at(0) = (char*) correct_path.c_str();
+
+        if(pipe(out_pipe) == -1) {
+            perror("");
+            exit(1);
+        }
+
+        //First execution, doesn't have an incoming pipe
+        process = fork_pipe(NULL, out_pipe, argv);
+        ++i;
+
+        //Now out_pipe should have stuff in out_pipe[0]
+        in_pipe[0] = out_pipe[0];
+        in_pipe[1] = out_pipe[1];
+    }
+    else {
+        cerr << cmds1.at(0) << ": command not found" << endl;
+        return false;
+    }
+
+    for(unsigned int x = i; x < n-1; ++x) {
+        vector<string> cmd = remove_spaces(args.at(i));
+        correct_path = find_path(exec_paths, cmd.at(0));
+
+        if(correct_path != "null") {
+            vector<char*> argv = get_arguments(cmd);
+            correct_path = correct_path + "/" + cmd.at(0);
+            argv.at(0) = (char*) correct_path.c_str();
+
+            if(pipe(out_pipe) == -1) {
+                perror("");
+                exit(1);
+            }
+
+            process = fork_pipe(in_pipe, out_pipe, argv);
+            ++i;
+
+            in_pipe[0] = out_pipe[0];
+            in_pipe[1] = out_pipe[1];
+        }
+        else {
+            cerr << cmd.at(0) << ": command not found" << endl;
+            return false;
+        }
+    }
+
+    vector<string> cmdlast = remove_spaces(args.at(i));
+    correct_path = find_path(exec_paths, cmdlast.at(0));
+
+    if(correct_path != "null") {
+        vector<char*> argv = get_arguments(cmdlast);
+        correct_path = correct_path + "/" + cmdlast.at(0);
+        argv.at(0) = (char*) correct_path.c_str();
+
+        process = fork_pipe(in_pipe, NULL, argv);
+    }
+    else {
+        cerr << cmdlast.at(0) << ": command not found" << endl;
+        return false;
+    }
+    return process;
+}*/
+
+bool mult_pipe(int* in_pipe, int* out_pipe, vector<char*> &argv);
+
+bool execute_mult(vector<string> &args, vector<string> &temp,
+                  unsigned int i)
+{
+    for(unsigned int n = 0; n < temp.size(); ++n) {
+        if(temp.at(n) == "<") {
+
+        }
+        else if(temp.at(n) == ">") {
+
+        }
+        else if(temp.at(n) == ">>") {
+
+        }
+        else if(temp.at(n) == "|") {
+
+        }
+    }
+
+    return true;
+}
+
+bool special_handler(vector<string> &args, vector<string> &conn,
+                     unsigned int &i)
+{
+    vector<string> temp;
+    unsigned int index = i;
+    for(; i < conn.size(); ++i) {
+        if(is_special(conn.at(i)))
+            temp.push_back(conn.at(i));
+        else break;
+    }
+
+    //If we just have one special connector, then it's easy
+    if(temp.size() == 1) {
+        if(temp.at(0) == ">") {
+            return execute_out(args, index, ">");
+        }
+        else if(temp.at(0) == ">>") {
+            return execute_out(args, index, ">>");
+        }
+        else if(temp.at(0) == "<") {
+            return execute_in(args, index);
+        }
+        else if(temp.at(0) == "|") {
+            return execute_pipe(args, index);
+        }
+    }
+
+    //If we have more than one special connector, then it get's
+    //crazy
+    return execute_mult(args, temp, index);
+}
+
+void connectors(vector<string> &args, vector<string> &conn) {
+    unsigned int i = 0;
+    bool process = true;
+
+    //-----Have to execute the first command-----
+    //but if it's input/output stuff, have to do different stuff
+    if(!conn.empty()) {
+        if(is_special(conn.at(i))) {
+            process = special_handler(args, conn, i);
+        }
+        else process = execute(args.at(i));
+    }
+    else process = execute(args.at(i));
+
+    //-----Now go through the rest of the arguments-----
+    for(; i < conn.size(); ++i) {
+        if(conn.at(i) == ";") {
+            if(i+1 != conn.size()) {
+                if(is_special(conn.at(i+1))) {
+                    ++i;
+                    process = special_handler(args, conn, i);
+                }
+                else process = execute(args.at(i+1));
+            }
+            else process = execute(args.at(i+1));
+        }
+        else if(conn.at(i) == "&&") {
+            if(process) {
+                if(i+1 != conn.size()) {//last argument
+                    //Check if next argument is a special conn
+                    if(is_special(conn.at(i+1))) {
+                        ++i;
+                        process = special_handler(args, conn, i);
+                    }
+                    else process = execute(args.at(i+1));
+                }
+                else //What if it is the last argument?
+                    process = execute(args.at(i+1));
+            }
+            else process = false;
+        }
+        else if(conn.at(i) == "||") {
+            if(!process) {
+                if(i+1 != conn.size()) {
+                    if(is_special(conn.at(i+1))) {
+                        ++i;
+                        process = special_handler(args, conn, i);
+                    }
+                    else process = execute(args.at(i+1));
+                }
+                else process = execute(args.at(i+1));
+            }
+            else process = false;
+        }
+    }
+}
+
+void parse(string command) {
+    //-----Check the very first command for special cases-----
+    char_separator<char> delim(" \t\r\n");
+    tok mytok(command, delim);
+    tok::iterator it = mytok.begin();
+
+    if(*it == "exit") exit(0);
+    if(is_con(*it)) {
+        cerr << "bash: syntax error" << endl;
+        return;
+    }
+
+    //-----Create argument vector, may contain spaces-----
+    char_separator<char> delim2(";&|#<>");
+    tok mytok1(command, delim2);
+    tok::iterator it1 = mytok1.begin();
+
+    vector<string> args;
+    for(; it1 != mytok1.end(); ++it1) {
+        if(*it1 != " ") args.push_back(*it1);
+    }
+
+    //-----Create connector vector-----
+    vector<string> conn;
+    tok mytok2(command, delim);
+    tok::iterator it2 = mytok2.begin();
+    int syntax_err = 0;
+    int multiple_special = 0;
+    for(; it2 != mytok2.end(); ++it2) {
+        if(is_con(*it2)) {
+            conn.push_back(*it2);
+            ++syntax_err;
+
+            if(is_special(*it2) && *it2 != "|")
+                ++multiple_special;
+
+            if(multiple_special > 1) {
+                cerr << "bash: syntax error" << endl;
+                return;
+            }
+
+            if(syntax_err > 1) {
+                cerr << "bash: syntax error" << endl;
+                return;
+            }
+        }
+        else syntax_err = 0;
+    }
+
+    if(args.size() == conn.size()) {
+        cerr << "bash: syntax error" << endl;
+    }
+    //-----Now execute the stuff-----
+    else {
+        connectors(args, conn);
+    }
+}
+
+void remove_comments(string &command) {
+    int count = 0;
+    string::iterator it = command.begin();
+    for(; it != command.end(); ++it) {
+        if(*it == '#') {
+            command.erase(count, command.size()-count);
+            return;
+        }
+        ++count;
+    }
+}
+
+void trans_string(string &command) {
     string::iterator it;
 
-    for (it = command.begin(); it != command.end(); ++it) {
-        if (*it == ';') {
-	        it = command.insert(it, ' ');
-            it += 2;
-            it = command.insert(it, ' ');
-        }
-    }
-
-    for (it = command.begin(); it != command.end(); ++it) {
-        if (*it == '#') {
+    for(it = command.begin(); it != command.end(); ++it) {
+        if(*it == ';') {
             it = command.insert(it, ' ');
             it += 2;
             it = command.insert(it, ' ');
         }
     }
 
-    for (it = command.begin(); it != command.end(); ++it) {
-        if (*it == '&' && *(it + 1) == '&') {
+    for(it = command.begin(); it != command.end(); ++it) {
+        if(*it == '&' && *(it+1) == '&') {
             it = command.insert(it, ' ');
             it += 3;
             it = command.insert(it, ' ');
         }
     }
 
-    for (it = command.begin(); it != command.end(); ++it) {
-        if (*it == '|' && *(it + 1) == '|') {
-            cout << "*it: " << *it << endl;
-            cout << "*(it + 1): " << *(it+1) << endl;
+    for(it = command.begin(); it != command.end(); ++it) {
+        if(*it == '|' && *(it+1) == '|') {
             it = command.insert(it, ' ');
             it += 3;
             it = command.insert(it, ' ');
@@ -147,7 +773,7 @@ void trans_string (string& command) {
     }
 
     for(it = command.begin(); it != command.end(); ++it) {
-        if(*it == '>' && *(it + 1) == '>') {
+        if(*it == '>' && *(it+1) == '>') {
             it = command.insert(it, ' ');
             it += 3;
             it = command.insert(it, ' ');
@@ -169,356 +795,4 @@ void trans_string (string& command) {
             it = command.insert(it, ' ');
         }
     }
-}
-
-
-bool execute (char **argv) {
-    char str[] = "false";
-    char readbuffer[6];
-
-    //Creating a pipe. I want to communicate with parent whether or
-    //not execvp failed
-    int fd[2];
-    if (pipe(fd) == -1) perror("");
-
-    int pid = fork();
-    if (pid == -1) {
-        perror("");
-        exit(1);
-    }
-
-    else if (pid == 0) {
-        //Close the read end of the pipe
-        if (close(fd[0]) == -1) perror("");
-
-	    //If execvp fails we'll write into the pipe
-        if(execvp(argv[0], argv) == -1) {
-	        write(fd[1], str, (strlen(str)+1));
-            perror("");
-        }
-
-        exit(1);
-    }
-    else {
-        //Close the write end of the pipe
-	    if (close(fd[1]) == -1) perror("");
-
-	    //Want to wait for the child process to finish
-        if (wait(0) == -1) perror("");
-
-        //Now we can read in data from the child
-        if (read(fd[0], readbuffer, sizeof(readbuffer)) == -1) {
-            perror("");
-        }
-
-        //Check to see what readbuffer has stored in it
-        if (strcmp(readbuffer, "false") == 0) return false;
-        else return true;
-    }
-}
-
-
-void connectors (string con, bool& result, char **argv) {
-    if (con == ";") {
-        result = execute(argv);
-    }
-    else if (con == "&&") {
-        if (result) {
-            result = execute(argv);
-        }
-        else {
-            result = false;
-        }
-    }
-    else if (con == "||") {
-        if (!result) {
-            result = execute(argv);
-        }
-        else {
-            result = false;
-        }
-    }
-    //This means that there were no connectors
-    else if (con == "first") {
-        execute(argv);
-    }
-}
-
-
-void out_redir(char **argv, const char* arg2, const char* str) {
-    int pid;
-    int fd;
-
-    if((pid = fork()) == -1) {
-        perror("");
-        exit(1);
-    }
-    else if(pid == 0) { //Child process
-        //Open or create the second file
-        if(strcmp(str, ">") == 0) {
-            fd = open(arg2, O_RDWR|O_CREAT, S_IRUSR|S_IWUSR);
-            if(fd == -1) {
-                perror("");
-                exit(1);
-            }
-        }
-        else {
-            fd = open(arg2, O_RDWR|O_CREAT|O_APPEND,
-                      S_IRUSR|S_IWUSR);
-            if(fd == -1) {
-                perror("");
-                exit(1);
-            }
-        }
-
-        //Close stdout, and make fd the new stdout
-        if(dup2(fd, 1) == -1) {
-            perror("");
-            exit(1);
-        }
-
-        if(execvp(argv[0], argv) == -1) perror("");
-        exit(1);
-    }
-    else { //Parent process
-        if(wait(0) == -1) perror("");
-    }
-}
-
-void in_redir(char **argv, const char *arg2) {
-    int pid;
-    int fd;
-
-    if((pid = fork()) == -1) {
-        perror("");
-        exit(1);
-    }
-    else if(pid == 0) { //Child process
-        fd = open(arg2, O_RDONLY);
-        if(fd == -1) {
-            perror("");
-            exit(1);
-        }
-
-        //Close stdin, and make fd the new stdin
-        if(dup2(fd, 0) == -1) {
-            perror("");
-            exit(1);
-        }
-
-        if(execvp(argv[0], argv) == -1) perror("");
-        exit(1);
-    }
-    else { //Parent process
-        if(wait(0) == -1) perror("");
-    }
-}
-
-void forking(int* pip1, int* pip2, queue<char**> &v) {
-    int pid;
-    if((pid = fork()) == -1) {
-        perror("fork err");
-        exit(1);
-    }
-    else if(pid == 0) { //Child process
-        if(pip1 != NULL) {
-            //That means we have something to read
-            if(dup2(pip1[0], 0) == -1)
-                perror("dup err");
-            if(close(pip1[0]) == -1)
-                perror("close err");
-            if(close(pip1[1]) == -1)
-                perror("close err");
-        }
-
-        if(pip2 != NULL) {
-            //that means we have something to write
-            if(dup2(pip2[1], 1) == -1)
-                perror("dup err");
-            if(close(pip2[0]) == -1)
-                perror("close err");
-            if(close(pip2[1]) == -1)
-                perror("close err");
-        }
-
-        if(execvp(v.front()[0], v.front()) == -1)
-            perror("");
-        exit(1);
-    }
-    else { //Parent process
-        if(wait(0) == -1)
-            perror("");
-    }
-
-    int savestdin;
-    if((savestdin = dup(0)) == -1)
-        perror("");
-    if(dup2(savestdin, 0) == -1)
-        perror("");
-
-}
-
-void piping(char **argv, queue<char**> &v) {
-    int pip1[2];
-    int pip2[2];
-
-    if(pipe(pip2) == -1)
-        perror("");
-
-    //There is no input pipe
-    forking(NULL, pip2, v);
-    v.pop();
-
-    pip1[0] = pip2[0]; //So lpipe[0] has the read end
-    pip1[1] = pip2[1]; //So lpipe[1] has the write end
-
-    for(unsigned int i = 1; i < v.size() - 1; ++i) {
-        cout << "do stuff" << endl;
-    }
-
-    forking(pip1, NULL, v);
-
-    if(close(pip1[0]) == -1)
-        perror("");
-    if(close(pip1[1]) == -1)
-        perror("");
-    if(close(pip2[0]) == -1)
-        perror("");
-    if(close(pip2[1]) == -1)
-        perror("");
-}
-
-bool is_con(const char* s) {
-    if(strcmp(s, ";") == 0) return true;
-    else if(strcmp(s, "&&") == 0) return true;
-    else if(strcmp(s, "||") == 0) return true;
-    else if(strcmp(s, "<") == 0) return true;
-    else if(strcmp(s, ">") == 0) return true;
-    else if(strcmp(s, ">>") == 0) return true;
-    else if(strcmp(s, "#") == 0) return true;
-
-    return false;
-}
-
-void parse (char *cmd, char **argv) {
-    char *token = strtok(cmd, " \t\r\n");
-    argv[0] = token;
-
-    if (strcmp(token, "exit") == 0) exit(0);
-
-    int i = 1;
-    string connector = "first";
-    bool exec_result = true;
-
-    while (token != NULL) {
-        token = strtok(NULL, " \t\r\n");
-        argv[i] = token;
-        ++i;
-
-        if (token != NULL) {
-            if (strcmp(token, "#") == 0) {
-                argv[i-1] = NULL;
-                break;
-            }
-            else if (strcmp(token, "exit") == 0) {
-                if (connector == "first") exit(0);
-                else if (connector == ";") exit(0);
-                else if (connector == "&&" && exec_result) exit(0);
-                else if (connector == "||" && !exec_result) exit(0);
-            }
-            else if (strcmp(token, ";") == 0) {
-                argv[i-1] = NULL;
-                if (connector == "first") {
-                    exec_result = execute(argv);
-                    connector = ";";
-                    i = 0;
-                }
-                else {
-                    connectors(connector, exec_result, argv);
-                    connector = ";";
-                    i = 0;
-                }
-            }
-            else if (strcmp(token, "&&") == 0) {
-	            argv[i-1] = NULL;
-		        if (connector == "first") {
-		            exec_result = execute(argv);
-			        connector = "&&";
-			        i = 0;
-		        }
-		        else {
-		            connectors(connector, exec_result, argv);
-			        connector = "&&";
-			        i = 0;
-		        }
-            }
-	        else if (strcmp(token, "||") == 0) {
-	            argv[i-1] = NULL;
-		        if (connector == "first") {
-		            exec_result = execute(argv);
-			        connector = "||";
-		            i = 0;
-		        }
-		        else {
-		            connectors(connector, exec_result, argv);
-			        connector = "||";
-			        i = 0;
-		        }
-            }
-            else if(strcmp(token, ">") == 0) {
-                argv[i-1] = NULL;
-
-                token = strtok(NULL, " \t\r\n");
-                const char* arg2 = token;
-                out_redir(argv, arg2, ">");
-                i = 0;
-            }
-            else if(strcmp(token, ">>") == 0) {
-                argv[i-1] = NULL;
-
-                token = strtok(NULL, " \t\r\n");
-                const char* arg2 = token;
-                out_redir(argv, arg2, ">>");
-                i = 0;
-            }
-            else if(strcmp(token, "<") == 0) {
-                argv[i-1] = NULL;
-
-                token = strtok(NULL, " \t\r\n");
-                const char* arg2 = token;
-                in_redir(argv, arg2);
-                i = 0;
-            }
-            else if(strcmp(token, "|") == 0) {
-                argv[i-1] = NULL;
-
-                queue<char**> v;
-                v.push(argv);
-
-                char **arg2 = new char*;
-                int j = 0;
-
-                token = strtok(NULL, " \t\r\n");
-
-                while(token != NULL && !is_con(token)) {
-                    arg2[j] = token;
-                    ++j;
-                    if(strcmp(token, "|") == 0) {
-                        arg2[j] = NULL;
-                        v.push(arg2);
-                        j = 0;
-                    }
-                    token = strtok(NULL, " \t\r\n");
-                }
-                arg2[j] = NULL;
-                v.push(arg2);
-
-                piping(argv, v);
-                delete[] arg2;
-                i = 0;
-            }
-        }
-    }
-    if(connector == "first" || token != NULL)
-        connectors(connector, exec_result, argv);
 }
