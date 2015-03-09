@@ -12,10 +12,12 @@
 #include <errno.h>
 #include <vector>
 #include <boost/tokenizer.hpp>
+#include <signal.h>
 
 using namespace boost;
 using namespace std;
 
+void handler(int i);
 void parse(string command);
 void remove_comments(string &command);
 void trans_string(string &command);
@@ -23,6 +25,8 @@ void trans_string(string &command);
 typedef tokenizer< char_separator<char> > tok;
 
 int main() {
+    if(signal(SIGINT, SIG_IGN) == SIG_ERR) perror("");
+
     char *login = getlogin();
     char hostname[30];
     gethostname(hostname, 30);
@@ -53,6 +57,13 @@ int main() {
     }
 
     return 0;
+}
+
+void handler(int i) {
+    if(i == SIGINT) {
+        if(kill(0, SIGINT) == -1)
+            perror("");
+    }
 }
 
 bool is_con(string s) {
@@ -158,6 +169,8 @@ bool forking(vector<char*> &argv) {
         exit(1);
     }
     else if(pid == 0) {
+        if(signal(SIGINT, SIG_DFL) == SIG_ERR) perror("");
+
         if(execv(&argv[0][0], &argv[0]) == -1)
             perror("");
         exit(1);
@@ -205,6 +218,7 @@ bool out_redir(vector<char*> &argv, const char* file,
         exit(1);
     }
     else if(pid == 0) {
+        if(signal(SIGINT, SIG_DFL) == SIG_ERR) perror("");
         if(strcmp(str, ">") == 0) {
             fd = open(file, O_RDWR|O_CREAT|O_TRUNC,
                       S_IRUSR|S_IWUSR);
@@ -282,6 +296,7 @@ bool in_redir(vector<char*> &argv, const char *file) {
         exit(1);
     }
     else if(pid == 0) {
+        if(signal(SIGINT, SIG_DFL) == SIG_ERR) perror("");
         //Create file descriptor for the file
         fd = open(file, O_RDONLY);
         if(fd == -1) {
@@ -372,6 +387,7 @@ bool fork_pipe(int* in_pipe, int* out_pipe, vector<char*> &argv) {
         exit(1);
     }
     else if(pid == 0) {
+        if(signal(SIGINT, SIG_DFL) == SIG_ERR) perror("");
         //This means we have something to read
         if(in_pipe != NULL) {
             if(dup2(in_pipe[0], 0) == -1)
