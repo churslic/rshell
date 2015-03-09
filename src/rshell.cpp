@@ -101,8 +101,13 @@ vector<string> parse_path(string pathName) {
     tok::iterator it = mytok.begin();
 
     vector<string> v;
-    for(; it != mytok.end(); ++it)
-        v.push_back(*it);
+    for(; it != mytok.end(); ++it) {
+        if((*it).find("csshare") == string::npos &&
+           (*it).find("ccali003") == string::npos)
+        {
+            v.push_back(*it);
+        }
+    }
 
     return v;
 }
@@ -116,10 +121,11 @@ vector<string> create_path() {
 
 string find_path(string str) {
     vector<string> exec_paths = create_path();
+
     for(unsigned int i = 0; i < exec_paths.size(); ++i) {
         DIR *dirp = opendir(exec_paths.at(i).c_str());
         if(dirp == NULL) {
-            perror("");
+            perror("opendir err");
             exit(1);
         }
 
@@ -127,19 +133,20 @@ string find_path(string str) {
 
         while((direntp = readdir(dirp))) {
             if(direntp == NULL && errno != 0) {
-                perror("");
+                perror("readdir err");
                 exit(1);
             }
             if(strcmp(direntp->d_name, str.c_str()) == 0) {
                 if(closedir(dirp) == -1) {
-                    perror("");
+                    perror("closedir err");
                     exit(1);
                 }
+
                 return exec_paths.at(i);
             }
         }
         if(closedir(dirp) == -1) {
-            perror("");
+            perror("closedir err");
             exit(1);
         }
     }
@@ -243,6 +250,7 @@ bool execute(string args) {
     if(correct_path != "null") {
         vector<char*> argv = get_arguments(cmds);
         correct_path = correct_path + "/" + cmds.at(0);
+
         argv.at(0) = (char*) correct_path.c_str();
 
         return forking(argv);
