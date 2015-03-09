@@ -13,6 +13,7 @@
 #include <vector>
 #include <boost/tokenizer.hpp>
 #include <signal.h>
+#include <sys/param.h>
 
 using namespace boost;
 using namespace std;
@@ -27,6 +28,10 @@ typedef tokenizer< char_separator<char> > tok;
 int main() {
     if(signal(SIGINT, SIG_IGN) == SIG_ERR) perror("");
 
+    char buf[MAXPATHLEN];
+    if(getcwd(buf, MAXPATHLEN) == NULL) perror("");
+    string pwd = buf;
+
     char *login = getlogin();
     char hostname[30];
     gethostname(hostname, 30);
@@ -39,7 +44,7 @@ int main() {
     for(int i = 0; hostname[i] != '\0'; ++i)
         host.push_back(hostname[i]);
 
-    cout << name << "@" << host << ":~$ ";
+    cout << name << "@" << host << ":" << pwd << "$ ";
     string command;
     getline(cin, command);
 
@@ -52,7 +57,7 @@ int main() {
             }
         }
 
-        cout << name << "@" << host << ":~$ ";
+        cout << name << "@" << host << ":" << pwd << "$ ";
         getline(cin, command);
     }
 
