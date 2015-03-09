@@ -103,7 +103,10 @@ vector<string> parse_path(string pathName) {
     vector<string> v;
     for(; it != mytok.end(); ++it) {
         if((*it).find("csshare") == string::npos &&
-           (*it).find("ccali003") == string::npos)
+           (*it).find("ccali003") == string::npos &&
+           (*it).find("ucb") == string::npos &&
+           (*it).find("X11") == string::npos &&
+           (*it).find("openwin") == string::npos)
         {
             v.push_back(*it);
         }
