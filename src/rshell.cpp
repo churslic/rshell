@@ -57,6 +57,8 @@ int main() {
             }
         }
 
+        if(getcwd(buf, MAXPATHLEN) == NULL) perror("");
+        pwd = buf;
         cout << name << "@" << host << ":" << pwd << "$ ";
         getline(cin, command);
     }
@@ -192,10 +194,49 @@ bool forking(vector<char*> &argv) {
     }
 }
 
+bool change_dir(vector<string> &cmds) {
+    if(cmds.size() == 1) {
+        cerr << "bash: syntax err" << endl;
+        return false;
+    }
+
+    char buf[MAXPATHLEN];
+    if(getcwd(buf, MAXPATHLEN) == NULL) perror("");
+    string pwd = buf;
+
+    char_separator<char> delim("/");
+    tok mytok(cmds.at(1), delim);
+    tok::iterator it = mytok.begin();
+
+    vector<string> v;
+
+    for(; it != mytok.end(); ++it) {
+        v.push_back(*it);
+    }
+
+    for(unsigned int i = 0; i < v.size(); ++i) {
+        if(v.at(i) == "..") {
+            unsigned int pos = pwd.find_last_of("/");
+            pwd.erase(pos, pwd.size()-pos);
+        }
+        else {
+            pwd = pwd + "/" + v.at(i);
+        }
+    }
+
+    if(chdir(pwd.c_str()) == -1) {
+        perror("");
+        return false;
+    }
+
+    return true;
+}
+
 bool execute(string args) {
     vector<string> cmds = remove_spaces(args);
 
     if(cmds.at(0) == "exit") exit(0);
+    if(cmds.at(0) == "cd") return change_dir(cmds);
 
     string correct_path = find_path(cmds.at(0));
 
@@ -267,6 +308,7 @@ bool execute_out(vector<string> &args, unsigned int i,
     vector<string> cmds1 = remove_spaces(args.at(i));
 
     if(cmds1.at(0) == "exit") exit(0);
+    if(cmds1.at(0) == "cd") return change_dir(cmds1);
 
     vector<string> cmds2 = remove_spaces(args.at(i+1));
 
@@ -334,6 +376,7 @@ bool execute_in(vector<string> &args, unsigned int i) {
     vector<string> cmds1 = remove_spaces(args.at(i));
 
     if(cmds1.at(0) == "exit") exit(0);
+    if(cmds1.at(0) == "cd") return change_dir(cmds1);
 
     vector<string> cmds2 = remove_spaces(args.at(i+1));
 
@@ -439,6 +482,7 @@ bool execute_pipe(vector<string> &args, unsigned int &i) {
     vector<string> cmds1 = remove_spaces(args.at(i));
 
     if(cmds1.at(0) == "exit") exit(0);
+    if(cmds1.at(0) == "cd") return change_dir(cmds1);
 
     //If there is a nonexistent command anywhere,
     //pipe will not happen

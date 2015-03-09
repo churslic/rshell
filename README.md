@@ -14,12 +14,13 @@
  2. Type in `make`. All executables will be put in a bin folder.  Alternatively, you may type make and then the executable you wish to use.
 
 **Bugs/Limitations/Issues**
+
 *rshell*:
 
  - Connectors: For example, typing in `ls#pwd` into bash would not execute, but in this program, it will ignore `#pwd` and execute `ls`.  This program will also not allow connectors to be the last argument typed in.  For example `ls; pwd;`  or  `ls ||` are not allowed.
  - Exit:  Normally `exit | cat file1` would actually print out the content of `file1`, but in this shell, any time `exit` is the very first command, everything after it is ignored and the program will terminate.
  - Input/Output redirection: Multiple input calls OR multiple output calls will be treated as errors.  For example, `cat < file1 < file2` or `cat file1 > file2 > file3` will be treated as an error.
-
+ - cd: `cd` without any arguments will not change the directory to the home directory. `cd dirName` at the beginning of any command will ignore everything after it.  This is true for most cases in the actual bash shell, but this does not always happen, so therefore this is listed as an issue here.
 *ls*:
 
  - The formatting is done rather basically. It's default output is to print out with only 5 columns of minimum 14 width.  If the file name were to exceed this length, then the output will look crazy.
