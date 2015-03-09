@@ -1,0 +1,50 @@
+Script started on Sun 08 Mar 2015 09:55:34 PM PDT
+~
+ccali003@hammer $ cd Documents/Cs[KS100/hw3/rshell/[K
+~/Documents/CS100/hw3/rshell
+ccali003@hammer $ make rshell
+if [ ! -d bin ]; then mkdir bin; fi
+g++ -ansi -pedantic -Wall -Werror src/rshell.cpp -o bin/rshell
+~/Documents/CS100/hw3/rshell
+ccali003@hammer $ bin/rshell
+ccali003@hammer.cs.ucr.edu:/class/classes/ccali003/Documents/CS100/hw3/rshell$ #notice how the path is printed in the prompt
+ccali003@hammer.cs.ucr.edu:/class/classes/ccali003/Documents/CS100/hw3/rshell$ clear #this should deom  monstrate that execv is being used
+[H[2Jccali003@hammer.cs.ucr.edu:/class/classes/ccali003/Documents/CS100/hw3/rshell$ #need to make sure execv still works for the basic stuff
+ccali003@hammer.cs.ucr.edu:/class/classes/ccali003/Documents/CS100/hw3/rshell$ ls
+bin  LICENSE  Makefile	README.md  src	tests
+ccali003@hammer.cs.ucr.edu:/class/classes/ccali003/Documents/CS100/hw3/rshell$ ls; pwd
+bin  LICENSE  Makefile	README.md  src	tests
+/class/classes/ccali003/Documents/CS100/hw3/rshell
+ccali003@hammer.cs.ucr.edu:/class/classes/ccali003/Documents/CS100/hw3/rshell$ blah
+blah: command not found
+ccali003@hammer.cs.ucr.edu:/class/classes/ccali003/Documents/CS100/hw3/rshell$ ls && pwd
+bin  LICENSE  Makefile	README.md  src	tests
+/class/classes/ccali003/Documents/CS100/hw3/rshell
+ccali003@hammer.cs.ucr.edu:/class/classes/ccali003/Documents/CS100/hw3/rshell$ ls || pwd
+bin  LICENSE  Makefile	README.md  src	tests
+ccali003@hammer.cs.ucr.edu:/class/classes/ccali003/Documents/CS100/hw3/rshell$ blah || pwd
+blah: command not found
+/class/classes/ccali003/Documents/CS100/hw3/rshell
+ccali003@hammer.cs.ucr.edu:/class/classes/ccali003/Documents/CS100/hw3/rshell$ cat
+blah
+blah
+blah
+blah
+blah
+blah
+^Cccali003@hammer.cs.ucr.edu:/class/classes/ccali003/Documents/CS100/hw3/rshell$ #signal ctrl C is ignored and won't terminate the whole program
+ccali003@hammer.cs.ucr.edu:/class/classes/ccali003/Documents/CS100/hw3/rshell$ clear
+[H[2Jccali003@hammer.cs.ucr.edu:/class/classes/ccali003/Documents/CS100/hw3/rshell$ #demonstrating cd
+ccali003@hammer.cs.ucr.edu:/class/classes/ccali003/Documents/CS100/hw3/rshell$ cd #without arguments will not go to home directory
+bash: syntax err
+ccali003@hammer.cs.ucr.edu:/class/classes/ccali003/Documents/CS100/hw3/rshell$ cd ..
+ccali003@hammer.cs.ucr.edu:/class/classes/ccali003/Documents/CS100/hw3$ cd rshell
+ccali003@hammer.cs.ucr.edu:/class/classes/ccali003/Documents/CS100/hw3/rshell$ cd ../../hw0
+ccali003@hammer.cs.ucr.edu:/class/classes/ccali003/Documents/CS100/hw0$ cd blah
+No such file or directory
+ccali003@hammer.cs.ucr.edu:/class/classes/ccali003/Documents/CS100/hw0$ exit
+~/Documents/CS100/hw3/rshell
+ccali003@hammer $ exit
+exit
+
+Script done on Sun 08 Mar 2015 09:59:21 PM PDT
